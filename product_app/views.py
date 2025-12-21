@@ -87,7 +87,7 @@ def product_details(request, pk):
         'user_comment': user_comment,
         'already_in_cart': already_in_cart
     }
-    return render(request, 'product_app/product_detail.html', context)
+    return render(request, 'product_app/Product_detail.html', context)
 
 
 
