@@ -3,7 +3,7 @@
 A Django-based e-commerce web application for managing and selling products online. This project provides a complete shopping experience with user authentication, product catalog, shopping cart, and order management.
 
 ## Live Demo
-- **click here**:https://simple-online-shop-zym1.onrender.com
+- **click here**: https://simple-online-shop-zym1.onrender.com
 
 ## Features
 
