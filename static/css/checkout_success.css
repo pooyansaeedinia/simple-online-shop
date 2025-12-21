@@ -1,0 +1,86 @@
+/* ===========================
+   Root Variables (Order Success Page)
+   =========================== */
+:root {
+    --primary: #0d6efd;
+    --secondary: #ffffff;
+    --text-dark: #222;
+    --text-light: #555;
+    --border: #e5e7eb;
+    --radius: 14px;
+
+    --success-bg: #f8f9fa;
+    --success-highlight: #d1e7dd;
+}
+
+
+/* ===========================
+   Order Success Wrapper
+   =========================== */
+.order-success {
+    background: var(--success-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    margin: 60px auto;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ===========================
+   Success Texts
+   =========================== */
+.order-success h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.order-success p {
+    font-size: 16px;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+
+
+/* ===========================
+   Back Button
+   =========================== */
+.order-success .btn {
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.order-success .btn-secondary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+}
+
+.order-success .btn-secondary:hover {
+    background: #0b5ed7;
+}
+
+
+/* ===========================
+   Responsive Design
+   =========================== */
+@media (max-width: 768px) {
+    .order-success {
+        padding: 25px;
+        margin: 30px auto;
+    }
+
+    .order-success h2 {
+        font-size: 20px;
+    }
+
+    .order-success p {
+        font-size: 14px;
+    }
+}

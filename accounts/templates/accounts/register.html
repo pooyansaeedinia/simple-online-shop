@@ -1,0 +1,73 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{##########################################################################################################################}
+
+{% block bootstrap %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock bootstrap %}
+
+{##########################################################################################################################}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/register.css" %}">
+{% endblock %}
+
+{##########################################################################################################################}
+
+{% block title %}
+    Register | SimpleShop
+{% endblock title %}
+
+{##########################################################################################################################}
+
+{% block contents %}
+    <div class="auth-box">
+        <h2 class="auth-title">Create a New Account</h2>
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="regName" class="form-label">Username</label>
+                <input name="username" type="text" class="form-control" id="regName" placeholder="Choose a username">
+                {% for error in form.username.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+
+            </div>
+            <div class="mb-3">
+                <label for="regEmail" class="form-label">Email</label>
+                <input name="email" type="email" class="form-control" id="regEmail" placeholder="Enter your email">
+                {% for error in form.email.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+
+            </div>
+            <div class="mb-3">
+                <label for="regPassword" class="form-label">Password</label>
+                <input name="password1" type="password" class="form-control" id="regPassword"
+                       placeholder="Create a password">
+                {% for error in form.password1.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                <label for="regConfirm" class="form-label">Confirm Password</label>
+                <input name="password2" type="password" class="form-control" id="regConfirm"
+                       placeholder="Repeat your password">
+                {% for error in form.password2.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <div class="switch-link">
+            Already have an account? <a href="{% url "accounts:login" %}">Login here</a>
+        </div>
+    </div>
+{% endblock contents %}

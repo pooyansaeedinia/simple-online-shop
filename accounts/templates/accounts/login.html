@@ -1,0 +1,53 @@
+{% extends "base2.html" %}
+{% load static %}
+
+
+{% block bootstrap %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock bootstrap %}
+
+{##########################################################################################################################}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/login.css" %}">
+{% endblock css %}
+
+{##########################################################################################################################}
+
+{% block title %}
+    Login | SimpleShop
+{% endblock title %}
+
+{##########################################################################################################################}
+
+{% block contents %}
+    <div class="auth-box">
+        <h2 class="auth-title">Login to Your Account</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="loginUsername" class="form-label">Username</label>
+                <input type="text" class="form-control" id="loginUsername" placeholder="Enter your username"
+                       name="username">
+                {% for error in form.username.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+
+            </div>
+            <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password"
+                       name="password">
+                {% for error in form.password.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <div class="switch-link">
+            Don’t have an account? <a href="{% url "accounts:register" %}">Register here</a><br>
+            <a href="{% url 'accounts:password_reset' %}" class="forgot">Forgot password?</a>
+        </div>
+    </div>
+{% endblock contents %}

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Product List
+{% endblock title %}
+
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock head %}
+
+{% block contents %}
+    <!-- Product Grid -->
+    <div class="container mt-5">
+        {% if query %}
+            <h2 class="mb-4 fw-bold text-primary text-center">Result for {{ query }}</h2>
+        {% elif pk == 1 %}
+            <h2 class="mb-4 fw-bold text-primary text-center">Discounted products</h2>
+        {% else %}
+            <h2 class="mb-4 fw-bold text-primary text-center">Products</h2>
+        {% endif %}
+        <div class="row g-3">
+
+
+            <!-- discounted product only -->
+            {% if pk == 1 %}
+                {% for product in all_products %}
+                    {% if product.final_price != product.price %}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card product-card h-100 position-relative">
+                                <!-- Discount badge -->
+                                <span class="badge bg-danger position-absolute top-0 end-0 m-2">Discount</span>
+
+                                <img src="{{ product.image.url }}" class="product-img"
+                                     alt="{{ product.name }} image">
+
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title text-primary">{{ product.name }}</h5>
+
+                                    <!-- Brand section -->
+                                    <p class="mb-1 text-secondary small">
+                                        <strong>Brand:</strong> {{ product.brand }}
+                                    </p>
+
+                                    <p class="text-muted small">{{ product.description|truncatechars:100 }}</p>
+
+                                    <div class="product-rating mb-1">
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= product.rating %}
+                                                <span class="text-warning" style="font-size:1.2rem;">&#9733;</span>
+                                            {% else %}
+                                                <span class="text-muted" style="font-size:1.2rem;">&#9734;</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- Price section -->
+                                    <p class="mb-1 text-muted text-decoration-line-through">{{ product.price }}$</p>
+                                    <p class="fw-bold text-success">{{ product.final_price }}$</p>
+
+                                    <a href="{% url 'product_app:product_details' pk=product.id %}"
+                                       class="btn btn-sm btn-outline-primary mt-auto">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                {% empty %}
+                    <p>no product has been submitted</p>
+                {% endfor %}
+
+
+
+                <!-- all products -->
+            {% else %}
+                {% for product in products %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card product-card h-100">
+                            {% if product in discounted_products %}
+                                <span class="badge bg-danger position-absolute top-0 end-0 m-2">Discount</span>
+                            {% endif %}
+                            <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }} image">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-primary">{{ product.name }}</h5>
+                                <!-- Brand section -->
+                                <p class="mb-1 text-secondary small">
+                                    <strong>Brand:</strong> {{ product.brand }}
+                                </p>
+                                <p class="text-muted small">{{ product.description|truncatechars:100 }}</p>
+
+                                <div class="product-rating mb-1">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= product.rating %}
+                                            <span class="text-warning" style="font-size:1.2rem;">&#9733;</span>
+                                        {% else %}
+                                            <span class="text-muted" style="font-size:1.2rem;">&#9734;</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+
+
+                                {% if product in discounted_products %}
+                                    <p class="mb-1 text-muted text-decoration-line-through">{{ product.price }}$</p>
+                                    {% if product.final_price != product.price %}
+                                        <p class="fw-bold text-success">{{ product.final_price }}$</p>
+                                    {% endif %}
+
+                                {% else %}
+                                    <p class="fw-bold mb-2">{{ product.price }}$</p>
+                                {% endif %}
+                                <a href="{% url 'product_app:product_details' pk=product.id %}"
+                                   class="btn btn-sm btn-outline-primary mt-auto">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>no product has been submitted</p>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination justify-content-center mt-4">
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="
+                            {% if query %}
+                                ?q={{ query }}&page={{ products.previous_page_number }}
+                            {% else %}
+                                ?page={{ products.previous_page_number }}
+                            {% endif %}">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for num in products.paginator.page_range %}
+                    <li class="page-item {% if products.number == num %}active{% endif %}">
+                        <a class="page-link" href="
+                                {% if query %}
+                                    ?q={{ query }}&page={{ num }}
+                                {% else %}
+                                    ?page={{ num }}
+                                {% endif %}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="
+                            {% if query %}
+                                ?q={{ query }}&page={{ products.next_page_number }}
+                            {% else %}
+                                ?page={{ products.next_page_number }}
+                            {% endif %}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock contents %}

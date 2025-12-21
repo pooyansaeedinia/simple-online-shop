@@ -1,0 +1,164 @@
+:root {
+    --primary: #0d6efd;
+    --accent: #6f42c1;
+    --nav-height: 64px;
+}
+
+body {
+    background: #f8f9fa;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: .4px;
+    color: #fff;
+}
+
+.navbar-custom {
+    background: var(--primary);
+    min-height: var(--nav-height);
+    padding-top: .45rem;
+    padding-bottom: .45rem;
+}
+
+.navbar-custom .collapse {
+    flex-basis: 100%;
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, 0.95);
+    padding: .3rem .6rem;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.contact-link {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    padding-right: .5rem;
+}
+
+.search-input.no-button {
+    border-radius: .5rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    padding: .45rem .9rem;
+    min-width: 260px;
+    height: 36px;
+}
+
+.search-input.no-button::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.cart-btn {
+    color: #fff;
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #dc3545;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.card {
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.promo-section {
+    background: #ffffff;
+    padding: 70px 0;
+    margin-top: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.promo-section::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(13, 110, 253, 0.08), transparent 70%);
+    top: 0;
+    left: 0;
+}
+
+.promo-card {
+    background: #f1f5ff;
+    border-radius: 14px;
+    padding: 30px 20px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.promo-icon {
+    font-size: 38px;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.footer {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: #fff;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+}
+
+.footer .col-md-2 .form-control {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+}
+
+.footer .btn-light {
+    color: var(--primary);
+}
+@media (max-width: 991.98px) {
+    .navbar-custom .input-group {
+        width: 100%;
+    }
+
+    .search-input.no-button {
+        min-width: 100%;
+    }
+
+    .contact-link {
+        padding-right: 0;
+        margin-left: .5rem;
+    }
+
+    .navbar-custom .nav-link {
+        padding: .4rem .6rem;
+    }
+}
+

@@ -1,0 +1,344 @@
+:root {
+    --primary: #0d6efd;
+    --accent: #6f42c1;
+    --card-w: 220px;
+    --card-w-sm: 180px;
+    --card-img-h: 140px;
+    --card-body-h: 110px;
+    --nav-height: 64px;
+}
+
+body {
+    background: #f8f9fa;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+/* Banner */
+.hero-banner {
+    height: 360px;
+    object-fit: cover;
+    width: 100%;
+    border-radius: .5rem;
+    display: block;
+}
+
+/* Scrollable product row */
+.products-row {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 1rem 0.25rem;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.products-row::-webkit-scrollbar {
+    height: 10px;
+}
+
+.products-row::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+}
+
+.products-row::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* fixed-size product cards for horizontal scroll */
+.product-card {
+    min-width: var(--card-w);
+    max-width: var(--card-w);
+    flex: 0 0 auto;
+}
+
+.product-card img {
+    height: var(--card-img-h);
+    object-fit: cover;
+    border-top-left-radius: .375rem;
+    border-top-right-radius: .375rem;
+}
+
+/* fixed body so cards never resize */
+.product-card .card-body {
+    height: var(--card-body-h);
+    display: flex;
+    flex-direction: column;
+    padding: .6rem;
+}
+
+/* Title and subtitle: responsive font and multiline clamp */
+.card-title {
+    margin: 0 0 .25rem 0;
+    font-weight: 600;
+    font-size: clamp(13px, 1.6vw, 15px);
+    line-height: 1.05;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-subtitle {
+    margin: 0 0 .5rem 0;
+    color: #6c757d;
+    font-size: clamp(11px, 1.2vw, 13px);
+    line-height: 1.05;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.hero-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: .5rem;
+}
+
+.footer {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: #fff;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+}
+
+.footer .col-md-2 .form-control {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+}
+
+.footer .btn-light {
+    color: var(--primary);
+}
+
+@media (max-width: 576px) {
+    :root {
+        --card-w: var(--card-w-sm);
+        --card-img-h: 120px;
+        --card-body-h: 100px;
+    }
+
+    .hero-banner {
+        height: 220px;
+    }
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.card-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+}
+
+.btn-scroll {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+/* cart icon badge */
+.cart-btn {
+    position: relative;
+    color: #fff;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #dc3545;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 360px;
+}
+
+.carousel-inner a {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateX(0);
+}
+
+.carousel-inner a.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.carousel-caption {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    border: none;
+    font-size: 1.6rem;
+    padding: 0 0.6rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    z-index: 5;
+    transition: background 0.3s;
+    height: 40px;
+    line-height: 28px;
+}
+
+.carousel-control:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.carousel-control.prev {
+    left: 10px;
+}
+
+.carousel-control.next {
+    right: 10px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.4rem;
+    z-index: 6;
+}
+
+.carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.carousel-indicators button.active {
+    background: #fff;
+}
+
+/* Navbar base */
+.navbar-custom {
+    background: var(--primary);
+    min-height: var(--nav-height);
+    padding-top: .45rem;
+    padding-bottom: .45rem;
+}
+
+/* Brand */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: .4px;
+    color: #fff;
+}
+
+/* Nav link overrides to ensure visibility on primary bg */
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, 0.95);
+    padding: .3rem .6rem;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.contact-link {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    padding-right: .5rem;
+}
+
+.cart-btn {
+    color: #fff;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #dc3545;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.search-input.no-button {
+    border-radius: .5rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    padding: .45rem .9rem;
+    min-width: 260px;
+}
+
+.search-input.no-button::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar-custom .collapse {
+    flex-basis: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-custom .input-group {
+        width: 100%;
+    }
+
+    .search-input.no-button {
+        min-width: 100%;
+    }
+
+    .contact-link {
+        padding-right: 0;
+        margin-left: .5rem;
+    }
+
+    .navbar-custom .nav-link {
+        padding: .4rem .6rem;
+    }
+}
+

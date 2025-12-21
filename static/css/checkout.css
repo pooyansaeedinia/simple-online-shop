@@ -1,0 +1,130 @@
+/* ===========================
+   Root Variables (Checkout Page)
+   =========================== */
+:root {
+    --primary: #0d6efd;
+    --accent: #6f42c1;
+    --secondary: #ffffff;
+    --text-dark: #222;
+    --text-light: #555;
+    --border: #e5e7eb;
+    --radius: 14px;
+
+    --form-bg: #fff;
+    --form-hover: #f9f9f9;
+}
+
+
+/* ===========================
+   Checkout Page Wrapper
+   =========================== */
+.checkout-container {
+    background: var(--primary);
+    padding: 30px 0;
+}
+
+
+/* ===========================
+   Order Summary Section
+   =========================== */
+.cart-summary {
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.checkout-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}
+
+.checkout-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.checkout-row h6 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.checkout-row p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.grand-total {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-top: 15px;
+}
+
+
+/* ===========================
+   Checkout Form Section
+   =========================== */
+form {
+    background: var(--form-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 25px;
+}
+
+form .form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+form .form-control,
+form textarea {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 10px;
+    font-size: 14px;
+}
+
+form .form-control:focus,
+form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
+}
+
+form .form-check-label {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+form .btn {
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+
+/* ===========================
+   Responsive Design
+   =========================== */
+@media (max-width: 768px) {
+    .checkout-row {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .checkout-img {
+        width: 140px;
+        height: 140px;
+    }
+
+    form {
+        padding: 15px;
+    }
+}

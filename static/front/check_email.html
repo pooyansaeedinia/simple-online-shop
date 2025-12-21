@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Check Email | SimpleShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #0d6efd;
+      background-image: url('image/bg_image/background.jpg');
+      background-repeat: repeat-x;
+      background-position: 0 50%;
+      background-size: auto 100%;
+      animation: scrollBackground 100s linear infinite;
+    }
+    @keyframes scrollBackground {
+      0% { background-position: 0 50%; }
+      100% { background-position: -1000px 50%; }
+    }
+    .auth-box {
+      width: 100%;
+      max-width: 700px;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+    }
+    .auth-title {
+      text-align: center;
+      color: #0d6efd;
+      font-weight: bold;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+    }
+    .text-center {
+      font-size: 1.1rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <h2 class="auth-title">Check Your Email</h2>
+    <p class="text-center">
+      We've sent a confirmation link to your email address.<br>
+      Please check your inbox and click the link to activate your account.
+    </p>
+  </div>
+</body>
+</html>

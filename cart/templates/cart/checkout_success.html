@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    checkout-success
+{% endblock title %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static "css/checkout_success.css" %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+{% endblock head %}
+
+{% block contents %}
+    <div class="order-success text-center my-5">
+        <h2>Your order has been placed successfully ✅</h2>
+        <p>Thank you for your purchase!</p>
+        <a href="{% url 'product_app:product_list' pk=0 %}" class="btn btn-secondary mt-3">Back to Product List</a>
+    </div>
+{% endblock contents %}

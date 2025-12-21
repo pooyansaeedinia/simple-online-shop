@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/category.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand me-3" href="index.html">SimpleShop</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse w-100" id="mainNavbar">
+                <div class="row w-100 align-items-center gx-2">
+                    <!-- Left: nav links -->
+                    <div class="col-12 col-lg-4 d-flex justify-content-start">
+                        <ul class="navbar-nav">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="category.html">Categories</a></li>
+                            <li class="nav-item"><a class="nav-link" href="products.html">Products</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Center: search (keeps value via query) -->
+                    <div class="col-12 col-lg-4 d-flex justify-content-center">
+                        <form class="w-100 w-md-75" method="get" action="products.html">
+                            <input type="search" name="q"
+                                   class="form-control search-input no-button"
+                                   placeholder="Search products..."
+                                   value=""
+                                   aria-label="Search products">
+                        </form>
+                    </div>
+
+
+                    <!-- Right: contact / auth / cart -->
+                    <div class="col-12 col-lg-4 d-flex justify-content-end align-items-center gap-2">
+                        <a class="nav-link text-light contact-link" href="#contactus">Contact Us</a>
+
+                        <ul class="navbar-nav d-flex flex-row align-items-center gap-2 mb-0">
+                            <li class="nav-item"><a class="nav-link" href="#login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#register">Register</a></li>
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-outline-light position-relative cart-btn"
+                                   href="#cart" aria-label="View cart">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                         class="bi bi-cart" viewBox="0 0 16 16" aria-hidden="true">
+                                        <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .49.598l-1.5 7A.5.5 0 0 1 13 13H4a.5.5 0 0 1-.49-.402L1.61 2H.5a.5.5 0 0 1-.5-.5zM5 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 1a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                    </svg>
+                                    <span class="cart-badge" id="cartCount">3</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Categories -->
+    <main class="container my-5">
+        <h2 class="mb-4 fw-bold text-primary">Product Categories</h2>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://picsum.photos/400/300?random=10" class="card-img-top" alt="Category image">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Electronics</h5>
+                        <a href="products.html?category=1" class="btn btn-primary btn-sm mt-2">View Products</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://picsum.photos/400/300?random=11" class="card-img-top" alt="Category image">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Clothing</h5>
+                        <a href="products.html?category=2" class="btn btn-primary btn-sm mt-2">View Products</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://picsum.photos/400/300?random=12" class="card-img-top" alt="Category image">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Home & Garden</h5>
+                        <a href="products.html?category=3" class="btn btn-primary btn-sm mt-2">View Products</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://picsum.photos/400/300?random=13" class="card-img-top" alt="Category image">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Sports</h5>
+                        <a href="products.html?category=4" class="btn btn-primary btn-sm mt-2">View Products</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Promo Section -->
+    <section class="promo-section">
+        <div class="container position-relative">
+            <h2>Exclusive Deals & Benefits 🎁</h2>
+            <p>Join thousands of smart shoppers who enjoy our discounts, free shipping, and loyalty rewards — all in one
+                place.</p>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-3 col-sm-6">
+                    <div class="promo-card">
+                        <div class="promo-icon">💸</div>
+                        <h5>Flash Sales</h5>
+                        <p>Save up to 70% on top products every weekend!</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="promo-card">
+                        <div class="promo-icon">🚚</div>
+                        <h5>Free Shipping</h5>
+                        <p>Enjoy free delivery on orders over $100.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="promo-card">
+                        <div class="promo-icon">💎</div>
+                        <h5>VIP Club</h5>
+                        <p>Earn points & get exclusive early access to new arrivals.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="promo-card">
+                        <div class="promo-icon">🔁</div>
+                        <h5>Easy Returns</h5>
+                        <p>Not satisfied? Get your money back within 7 days.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-5">
+        <div class="container">
+            <div class="row gy-4 align-items-center">
+                <div class="col-md-4">
+                    <h5 class="mb-3">SimpleShop</h5>
+                    <p>Your simple store for great prices, fast shipping, and friendly support.</p>
+                    <div class="mt-3">
+                        <a class="btn btn-sm btn-light text-primary me-1"
+                           aria-label="Facebook"><strong>Facebook</strong></a>
+                        <a class="btn btn-sm btn-light text-primary me-1"
+                           aria-label="Instagram"><strong>Instagram</strong></a>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <h6 class="mb-2">Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="category.html">Categories</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="#contactus">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h6 class="mb-2">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#contactus">Contact Us</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#cart">Cart</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-2 text-md-end">
+                    <h6 class="mb-2">Cart</h6>
+                    <p class="mb-1">Open your cart</p>
+                    <a href="#cart" class="btn btn-light btn-sm">
+                        <!-- cart icon small -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-cart" viewBox="0 0 16 16" aria-hidden="true">
+                            <path
+                                    d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .49.598l-1.5 7A.5.5 0 0 1 13 13H4a.5.5 0 0 1-.49-.402L1.61 2H.5a.5.5 0 0 1-.5-.5zM5 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 1a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                        <span class="ms-2">Cart (<span id="footerCartCount">3</span>)</span>
+                    </a>
+                </div>
+            </div>
+
+            <hr class="my-4 border-light opacity-25"/>
+            <div class="d-flex justify-content-between small">
+                <div>© 2025 SimpleShop</div>
+                <div>Built with Bootstrap</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/category.js"></script>
+</body>
+</html>
+
