@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     SimpleShop
 {% endblock title %}
 
-{% load static %}
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 {% endblock head %}
@@ -19,7 +19,7 @@
                     <div class="carousel-inner">
                         <!-- slide 1 -->
                         {% for banner in banners %}
-                            <a href="{{ banner.link }}" class="card-link d-block active" role="group"
+                            <a href="{{ banner.link }}" class="card-link d-block {% if forloop.first %}active{% endif %}" role="group"
                                aria-roledescription="slide" aria-label="Slide 1">
                                 <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="hero-banner w-100"
                                      loading="lazy"/>
