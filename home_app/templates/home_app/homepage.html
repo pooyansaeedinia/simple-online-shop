@@ -11,134 +11,213 @@
 
 
 {% block contents %}
-    <!-- Main container -->
-    <main class="container my-5">
-        {% if banners %}
-            <section class="mb-5">
-                <div id="heroCarousel" class="hero-wrapper" aria-roledescription="carousel">
-                    <div class="carousel-inner">
-                        <!-- slide 1 -->
-                        {% for banner in banners %}
-                            <a href="{{ banner.link }}" class="card-link d-block {% if forloop.first %}active{% endif %}" role="group"
-                               aria-roledescription="slide" aria-label="Slide 1">
-                                <img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="hero-banner w-100"
-                                     loading="lazy"/>
-                                <div class="carousel-caption">
-                                    <h3 class="fw-bold mb-1">{{ banner.description }}</h3>
-                                    <small>{{ banner.small_description }}</small>
-                                </div>
-                            </a>
-                        {% endfor %}
+
+<!-- Main container -->
+<main class="container py-5">
+
+    {% if banners %}
+    <!-- Hero Section -->
+    <section class="mb-5 hero-section">
+    <div id="heroCarousel" class="modern-hero">
+
+        <div class="hero-slides">
+
+            {% for banner in banners %}
+            <div class="hero-slide {% if forloop.first %}active{% endif %}">
+                <a href="{{ banner.link }}" class="d-block">
+                    <img src="{{ banner.image.url }}"
+                         alt="{{ banner.title }}"
+                         class="hero-banner">
+
+                    <div class="modern-caption">
+                        <h2>{{ banner.description }}</h2>
+                        <p>{{ banner.small_description }}</p>
                     </div>
-
-                    <!-- Controls -->
-                    <button class="carousel-control prev" aria-label="Previous slide" id="heroPrev">‹</button>
-                    <button class="carousel-control next" aria-label="Next slide" id="heroNext">›</button>
-
-                    <!-- Indicators (dynamically filled by JS) -->
-                    <div class="carousel-indicators" id="heroIndicators" aria-hidden="false"></div>
-                </div>
-            </section>
-        {% endif %}
-
-        <!-- Discounted products -->
-        <section class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">Special Discount Products</h3>
-                <div>
-                    <a href="{% url 'product_app:product_list' pk=1 %}" class="text-decoration-none me-3">View all</a>
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-scroll"
-                            onclick="scrollRow('discountProducts', -1)">‹
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-scroll ms-1"
-                            onclick="scrollRow('discountProducts', 1)">›
-                    </button>
-                </div>
+                </a>
             </div>
+            {% endfor %}
 
-            <div id="discountProducts" class="products-row" aria-label="discount products">
-                <!-- inline product cards -->
-                {% if discounted_products %}
-                    {% for product in products %}
-                        {% if product.final_price != product.price %}
-                            <div class="card product-card h-100 position-relative shadow-sm">
-                                <span class="badge bg-danger discount-badge">Discount</span>
-                                <a class="card-link" href="{% url 'product_app:product_details' pk=product.id %}">
-                                    <img class="card-img-top" src="{{ product.image.url }}"
-                                         alt="{{ product.name }} image" loading="lazy">
-                                    <div class="card-body">
-                                        <h6 class="card-title">{{ product.name }}</h6>
-                                        <p class="card-subtitle">{{ product.description|truncatechars:50 }}</p>
-                                        <div class="card-price-row mt-auto">
-                                            <div><small
-                                                    class="text-muted text-decoration-line-through me-2">${{ product.price }}</small><strong>{{ product.final_price }}</strong>
-                                            </div>
-                                            <button class="btn btn-outline-primary btn-sm" type="button"
-                                                    onclick="location.href='{% url 'product_app:product_details' pk=product.id %}'">
-                                                View
-                                            </button>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <p>no discounted product</p>
-                {% endif %}
+        </div>
+
+        <button id="heroPrev" class="modern-control prev">‹</button>
+        <button id="heroNext" class="modern-control next">›</button>
+
+        <div id="heroIndicators" class="modern-indicators"></div>
+
+    </div>
+</section>
+    {% endif %}
+
+
+    <!-- ========================= -->
+    <!-- Discounted Products -->
+    <!-- ========================= -->
+    <section class="mb-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="section-title mb-0">Special Discount Products</h3>
+
+            <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'product_app:product_list' pk=1 %}"
+                   class="view-all-link">View all</a>
+
+                <button type="button"
+                        class="btn btn-sm btn-light btn-scroll-modern"
+                        onclick="scrollRow('discountProducts', -1)">‹</button>
+
+                <button type="button"
+                        class="btn btn-sm btn-light btn-scroll-modern"
+                        onclick="scrollRow('discountProducts', 1)">›</button>
             </div>
-        </section>
+        </div>
 
-        <!-- New products -->
-        <section class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">New Arrivals</h3>
-                <div>
-                    <a href="{% url 'product_app:product_list' pk=0 %}" class="text-decoration-none me-3">View all</a>
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-scroll"
-                            onclick="scrollRow('newProducts', -1)">‹
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-scroll ms-1"
-                            onclick="scrollRow('newProducts', 1)">›
-                    </button>
-                </div>
-            </div>
+        <div id="discountProducts"
+             class="products-row"
+             aria-label="discount products">
 
-            <div id="newProducts" class="products-row" aria-label="new products">
-                {% for product in new_products %}
-                    <div class="card product-card h-100 position-relative shadow-sm">
-                        {% if product.final_price != product.price %}
-                            <span class="badge bg-danger discount-badge">Discount</span>
-                        {% endif %}
-                        <a class="card-link" href="{% url 'product_app:product_details' pk=product.id %}">
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }} image"
+            {% if discounted_products %}
+                {% for product in products %}
+                    {% if product.final_price != product.price %}
+                    <div class="card product-card modern-card border-0 position-relative">
+
+                        <span class="badge discount-badge-modern">Sale</span>
+
+                        <a class="card-link text-decoration-none"
+                           href="{% url 'product_app:product_details' pk=product.id %}">
+
+                            <img class="card-img-top modern-img"
+                                 src="{{ product.image.url }}"
+                                 alt="{{ product.name }} image"
                                  loading="lazy">
-                            <div class="card-body">
-                                <h6 class="card-title">{{ product.name }}</h6>
-                                <p class="card-subtitle">{{ product.description|truncatechars:100 }}</p>
-                                <div class="card-price-row mt-auto">
-                                    {% if product.final_price != product.price %}
-                                        <div><small
-                                                class="text-muted text-decoration-line-through me-2">${{ product.price }}</small><strong>{{ product.final_price }}</strong>
-                                        </div>
-                                    {% else %}
-                                        <div><strong>${{ product.price }}</strong></div>
-                                    {% endif %}
-                                    <button class="btn btn-outline-primary btn-sm" type="button"
+
+                            <div class="card-body d-flex flex-column">
+
+                                <h6 class="product-title">
+                                    {{ product.name }}
+                                </h6>
+
+                                <p class="product-desc">
+                                    {{ product.description|truncatechars:50 }}
+                                </p>
+
+                                <div class="card-price-row mt-auto d-flex justify-content-between align-items-center">
+
+                                    <div>
+                                        <small class="old-price me-2">
+                                            ${{ product.price }}
+                                        </small>
+                                        <span class="final-price">
+                                            ${{ product.final_price }}
+                                        </span>
+                                    </div>
+
+                                    <button class="btn btn-primary btn-sm modern-btn"
+                                            type="button"
                                             onclick="location.href='{% url 'product_app:product_details' pk=product.id %}'">
                                         View
                                     </button>
+
                                 </div>
                             </div>
                         </a>
                     </div>
-                {% empty %}
-                    <p>no new product</p>
+                    {% endif %}
                 {% endfor %}
+            {% else %}
+                <p class="text-muted">No discounted product</p>
+            {% endif %}
+        </div>
+    </section>
 
+
+    <!-- ========================= -->
+    <!-- New Arrivals -->
+    <!-- ========================= -->
+    <section class="mb-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="section-title mb-0">New Arrivals</h3>
+
+            <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'product_app:product_list' pk=0 %}"
+                   class="view-all-link">View all</a>
+
+                <button type="button"
+                        class="btn btn-sm btn-light btn-scroll-modern"
+                        onclick="scrollRow('newProducts', -1)">‹</button>
+
+                <button type="button"
+                        class="btn btn-sm btn-light btn-scroll-modern"
+                        onclick="scrollRow('newProducts', 1)">›</button>
             </div>
-        </section>
-    </main>
+        </div>
+
+        <div id="newProducts"
+             class="products-row"
+             aria-label="new products">
+
+            {% for product in new_products %}
+            <div class="card product-card modern-card border-0 position-relative">
+
+                {% if product.final_price != product.price %}
+                <span class="badge discount-badge-modern">Sale</span>
+                {% endif %}
+
+                <a class="card-link text-decoration-none"
+                   href="{% url 'product_app:product_details' pk=product.id %}">
+
+                    <img class="card-img-top modern-img"
+                         src="{{ product.image.url }}"
+                         alt="{{ product.name }} image"
+                         loading="lazy">
+
+                    <div class="card-body d-flex flex-column">
+
+                        <h6 class="product-title">
+                            {{ product.name }}
+                        </h6>
+
+                        <p class="product-desc">
+                            {{ product.description|truncatechars:100 }}
+                        </p>
+
+                        <div class="card-price-row mt-auto d-flex justify-content-between align-items-center">
+
+                            {% if product.final_price != product.price %}
+                            <div>
+                                <small class="old-price me-2">
+                                    ${{ product.price }}
+                                </small>
+                                <span class="final-price">
+                                    ${{ product.final_price }}
+                                </span>
+                            </div>
+                            {% else %}
+                            <div>
+                                <span class="final-price">
+                                    ${{ product.price }}
+                                </span>
+                            </div>
+                            {% endif %}
+
+                            <button class="btn btn-primary btn-sm modern-btn"
+                                    type="button"
+                                    onclick="location.href='{% url 'product_app:product_details' pk=product.id %}'">
+                                View
+                            </button>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p class="text-muted">No new product</p>
+            {% endfor %}
+
+        </div>
+    </section>
+
+</main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/homepage.js' %}"></script>
 {% endblock contents %}

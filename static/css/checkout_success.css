@@ -1,86 +1,67 @@
-/* ===========================
-   Root Variables (Order Success Page)
-   =========================== */
-:root {
-    --primary: #0d6efd;
-    --secondary: #ffffff;
-    --text-dark: #222;
-    --text-light: #555;
-    --border: #e5e7eb;
-    --radius: 14px;
+/* ================================================= */
+/* CHECKOUT SUCCESS – MODERN UI */
+/* ================================================= */
 
-    --success-bg: #f8f9fa;
-    --success-highlight: #d1e7dd;
+.checkout-success-page {
+    padding: 3rem 0 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
 }
 
-
-/* ===========================
-   Order Success Wrapper
-   =========================== */
-.order-success {
-    background: var(--success-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 40px;
-    margin: 60px auto;
-    max-width: 600px;
+.checkout-success-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    max-width: 440px;
+    width: 100%;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
 }
 
-
-/* ===========================
-   Success Texts
-   =========================== */
-.order-success h2 {
-    font-size: 24px;
+.checkout-success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    background: #d1fae5;
+    color: #059669;
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 15px;
+    line-height: 64px;
+    border-radius: 50%;
 }
 
-.order-success p {
-    font-size: 16px;
-    color: var(--text-light);
-    margin-bottom: 25px;
+.checkout-success-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.5rem;
 }
 
+.checkout-success-text {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+}
 
-/* ===========================
-   Back Button
-   =========================== */
-.order-success .btn {
-    padding: 10px 22px;
-    border-radius: var(--radius);
+.checkout-success-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
-    transition: background 0.3s ease;
-}
-
-.order-success .btn-secondary {
-    background: var(--primary);
+    border-radius: 10px;
+    background: #2563eb;
     color: #fff;
-    border: none;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
 }
 
-.order-success .btn-secondary:hover {
-    background: #0b5ed7;
-}
-
-
-/* ===========================
-   Responsive Design
-   =========================== */
-@media (max-width: 768px) {
-    .order-success {
-        padding: 25px;
-        margin: 30px auto;
-    }
-
-    .order-success h2 {
-        font-size: 20px;
-    }
-
-    .order-success p {
-        font-size: 14px;
-    }
+.checkout-success-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
 }

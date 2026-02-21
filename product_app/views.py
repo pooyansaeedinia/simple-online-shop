@@ -65,6 +65,7 @@ def product_details(request, pk):
     already_in_cart = False
     form = CommentForm()
 
+    cart = None
     if user.is_authenticated:
         if request.method == 'POST':
             form = CommentForm(request.POST)
@@ -79,13 +80,24 @@ def product_details(request, pk):
         if cart:
             already_in_cart = CartItem.objects.filter(cart=cart, product=product).exists()
 
+    # Cart sidebar: items and totals for product detail page
+    cart_items = []
+    cart_total = 0
+    cart_items_count = 0
+    if request.user.is_authenticated and cart:
+        cart_items = list(cart.items.select_related('product').all())
+        cart_total = cart.total_price
+        cart_items_count = cart.total_items
 
     context = {
         'product': product,
         'comments': comments,
         'form': form,
         'user_comment': user_comment,
-        'already_in_cart': already_in_cart
+        'already_in_cart': already_in_cart,
+        'cart_items': cart_items,
+        'cart_total': cart_total,
+        'cart_items_count': cart_items_count,
     }
     return render(request, 'product_app/Product_detail.html', context)
 

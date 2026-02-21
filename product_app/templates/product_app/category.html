@@ -1,71 +1,64 @@
 {% extends 'base.html' %}
-
-{% block title %}
-    Categories
-{% endblock title %}
-
 {% load static %}
+
+{% block title %}Categories{% endblock title %}
+
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/category.css' %}">
 {% endblock head %}
 
 {% block contents %}
-    <!-- Categories -->
-    <main class="container my-5">
-        <h2 class="mb-4 fw-bold text-primary">Product Categories</h2>
-        <div class="row g-4">
+    <div class="container category-page">
+        <header class="category-header">
+            <h1 class="category-title">Product Categories</h1>
+        </header>
+
+        <div class="category-grid">
             {% for category in categories %}
-                <div class="col-md-3 col-sm-6">
-                    <div class="card h-100 shadow-sm">
-                        <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }} image">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ category.name }}</h5>
-                            <a href="{% url 'product_app:product_list' pk=category.id %}" class="btn btn-primary btn-sm mt-2">View
-                                Products</a>
+                <article class="category-card-wrap">
+                    <a href="{% url 'product_app:product_list' pk=category.id %}" class="category-card">
+                        <div class="category-card-img-wrap">
+                            <img src="{{ category.image.url }}" class="category-card-img" alt="{{ category.name }}">
                         </div>
-                    </div>
-                </div>
+                        <div class="category-card-body">
+                            <h2 class="category-card-title">{{ category.name }}</h2>
+                            <span class="category-card-cta">View Products</span>
+                        </div>
+                    </a>
+                </article>
+            {% empty %}
+                <p class="category-empty">No categories yet.</p>
             {% endfor %}
         </div>
-    </main>
 
-    <!-- Promo Section -->
-    <section class="promo-section">
-        <div class="container position-relative">
-            <h2>Exclusive Deals & Benefits 🎁</h2>
-            <p>Join thousands of smart shoppers who enjoy our discounts, free shipping, and loyalty rewards — all in one
-                place.</p>
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-3 col-sm-6">
+        <section class="promo-section">
+            <div class="promo-inner">
+                <h2 class="promo-title">Exclusive Deals & Benefits</h2>
+                <p class="promo-desc">Join thousands of smart shoppers who enjoy our discounts, free shipping, and loyalty rewards — all in one place.</p>
+                <div class="promo-grid">
                     <div class="promo-card">
-                        <div class="promo-icon">💸</div>
-                        <h5>Flash Sales</h5>
-                        <p>Save up to 70% on top products every weekend!</p>
+                        <span class="promo-icon">💸</span>
+                        <h3 class="promo-card-title">Flash Sales</h3>
+                        <p class="promo-card-desc">Save up to 70% on top products every weekend!</p>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
                     <div class="promo-card">
-                        <div class="promo-icon">🚚</div>
-                        <h5>Free Shipping</h5>
-                        <p>Enjoy free delivery on orders over $100.</p>
+                        <span class="promo-icon">🚚</span>
+                        <h3 class="promo-card-title">Free Shipping</h3>
+                        <p class="promo-card-desc">Enjoy free delivery on orders over $100.</p>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
                     <div class="promo-card">
-                        <div class="promo-icon">💎</div>
-                        <h5>VIP Club</h5>
-                        <p>Earn points & get exclusive early access to new arrivals.</p>
+                        <span class="promo-icon">💎</span>
+                        <h3 class="promo-card-title">VIP Club</h3>
+                        <p class="promo-card-desc">Earn points & get exclusive early access to new arrivals.</p>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
                     <div class="promo-card">
-                        <div class="promo-icon">🔁</div>
-                        <h5>Easy Returns</h5>
-                        <p>Not satisfied? Get your money back within 7 days.</p>
+                        <span class="promo-icon">🔁</span>
+                        <h3 class="promo-card-title">Easy Returns</h3>
+                        <p class="promo-card-desc">Not satisfied? Get your money back within 7 days.</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
     <script src="{% static 'js/category.js' %}"></script>
 {% endblock contents %}

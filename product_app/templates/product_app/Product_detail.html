@@ -10,163 +10,173 @@
 
 {% block contents %}
 
-    <!-- Product Detail -->
-    <div class="container py-5">
-        <div class="row g-5">
-            <div class="col-md-6">
-                <img src="{{ product.image.url }}"
-                     alt="Elegant Wooden Chair" class="product-img"/>
+    <div class="container product-detail-page">
+        <div class="product-detail-hero">
+            <div class="product-detail-image-wrap">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img"/>
             </div>
-            <div class="col-md-6">
-                <h2>{{ product.name }}</h2>
-                <p class="text-muted mb-1" style="font-size:2rem;"><strong>Brand:</strong> {{ product.brand }}</p>
-                <p class="text-muted mb-3" style="font-size:2rem;"><strong>Category:</strong> {{ product.category }}</p>
-                {% for i in "12345"|make_list %}
-                    {% if forloop.counter <= product.rating %}
-                        <span class="rating active">&#9733;</span>
-                    {% else %}
-                        <span class="rating">&#9734;</span>
-                    {% endif %}
-                {% endfor %}
-
-                <p class="price">${{ product.final_price }}</p>
-
-                {% if product.quantity >= 5 %}
-                    <p class="stock-status">✅ Available in stock</p>
-                {% elif 0 < product.quantity and product.quantity < 5 %}
-                    <p class="stock-warning">⚠️ Only {{ product.quantity }} number of this product available</p>
-                {% else %}
-                    <p class="stock-unavailable">❌ Not available in stock</p>
-                {% endif %}
-
-                {% if product.quantity != 0 %}
-                    {% if user.is_authenticated %}
-
-                        {% if already_in_cart %}
-                            <button class="btn btn-secondary" disabled>
-                                Already in Cart
-                            </button>
+            <div class="product-detail-info">
+                <h1 class="product-detail-name">{{ product.name }}</h1>
+                <div class="product-meta">
+                    <span class="product-meta-item"><strong>Brand:</strong> {{ product.brand }}</span>
+                    <span class="product-meta-item"><strong>Category:</strong> {{ product.category }}</span>
+                </div>
+                <div class="product-rating-row" aria-label="Rating">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= product.rating %}
+                            <span class="rating active">&#9733;</span>
                         {% else %}
-
-                            <form action="{% url 'cart:add_to_cart' pk=product.id %}">
-                                {% csrf_token %}
-                                <button class="btn btn-primary">Add to Cart</button>
-                            </form>
+                            <span class="rating">&#9734;</span>
                         {% endif %}
-
+                    {% endfor %}
+                </div>
+                <p class="price">${{ product.final_price }}</p>
+                <div class="product-stock">
+                    {% if product.quantity >= 5 %}
+                        <p class="stock-status">In stock</p>
+                    {% elif 0 < product.quantity and product.quantity < 5 %}
+                        <p class="stock-warning">Only {{ product.quantity }} left</p>
                     {% else %}
-
-                        <button class="btn btn-primary" id="addToCartGuest">
-                            Add to Cart
-                        </button>
-
-                        <!-- پیام خطا (در ابتدا مخفی) -->
-                        <p id="loginMessage" style="color: red; margin-top: 8px; display: none;">
-                            You must log in to add items to your cart.
-                        </p>
-
+                        <p class="stock-unavailable">Out of stock</p>
                     {% endif %}
-                {% endif %}
+                </div>
+                <div class="product-actions">
+                    {% if product.quantity != 0 %}
+                        {% if user.is_authenticated %}
+                            {% if already_in_cart %}
+                                <button class="btn-product btn-product-secondary" disabled>Already in Cart</button>
+                            {% else %}
+                                <form action="{% url 'cart:add_to_cart' pk=product.id %}" class="product-cart-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-product btn-product-primary">Add to Cart</button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <button class="btn-product btn-product-primary" id="addToCartGuest">Add to Cart</button>
+                            <p id="loginMessage" class="product-login-message">
+                                You must log in to add items to your cart.
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
+            <aside class="product-detail-cart-sidebar">
+                <div class="cart-sidebar-card">
+                    <h3 class="cart-sidebar-title">Your Cart</h3>
+                    {% if user.is_authenticated %}
+                        {% if cart_items %}
+                            <p class="cart-sidebar-count">{{ cart_items_count }} item{{ cart_items_count|pluralize }}</p>
+                            <ul class="cart-sidebar-list">
+                                {% for item in cart_items %}
+                                    <li class="cart-sidebar-item">
+                                        <a href="{% url 'product_app:product_details' pk=item.product.id %}" class="cart-sidebar-item-link">
+                                            {{ item.product.name }}
+                                        </a>
+                                        <span class="cart-sidebar-item-qty">× {{ item.quantity }}</span>
+                                        <span class="cart-sidebar-item-price">${{ item.total_price }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="cart-sidebar-total">
+                                <span>Total</span>
+                                <strong>${{ cart_total }}</strong>
+                            </div>
+                            <a href="{% url 'cart:cart' %}" class="btn-product btn-product-primary cart-sidebar-btn">View Cart</a>
+                        {% else %}
+                            <p class="cart-sidebar-empty">Your cart is empty.</p>
+                            <a href="{% url 'product_app:product_list' pk=0 %}" class="btn-product btn-product-primary cart-sidebar-btn">Browse Products</a>
+                        {% endif %}
+                    {% else %}
+                        <p class="cart-sidebar-empty">Log in to see your cart.</p>
+                        <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn-product btn-product-primary cart-sidebar-btn">Log in</a>
+                    {% endif %}
+                </div>
+            </aside>
         </div>
 
-        <!-- Description -->
-        <div class="mt-5 product-detail-box">
-            <h4 class="detail-title">Details</h4>
-            <br>
-            <p class="detail-text">
-                {{ product.description|linebreaksbr }}
-            </p>
-        </div>
+        <section class="product-detail-box">
+            <h2 class="detail-title">Details</h2>
+            <p class="detail-text">{{ product.description|linebreaksbr }}</p>
+        </section>
 
-
-        <!-- Comments -->
-        <div class="mt-5">
-            <h4>User Comments</h4>
-
-            <div class="comments-scroll mb-4" id="commentsScroll">
+        <section class="product-comments-section">
+            <h2 class="comments-section-title">User Comments</h2>
+            <div class="comments-scroll" id="commentsScroll">
                 {% for comment in comments %}
                     <div class="comment-box">
-                        {% for i in "12345"|make_list %}
-                            {% if forloop.counter <= comment.rating %}
-                                <span class="rating active">&#9733;</span>
-                            {% else %}
-                                <span class="rating">&#9734;</span>
-                            {% endif %}
-                        {% endfor %}
-                        <p>{{ comment.user }}</p>
-                        <p>{{ comment.comment }}</p>
-                        <small>{{ comment.created_at|date:"Y/m/d H:i" }}</small>
+                        <div class="comment-rating">
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= comment.rating %}
+                                    <span class="rating active">&#9733;</span>
+                                {% else %}
+                                    <span class="rating">&#9734;</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="comment-author">{{ comment.user }}</p>
+                        <p class="comment-body">{{ comment.comment }}</p>
+                        <time class="comment-date">{{ comment.created_at|date:"Y/m/d H:i" }}</time>
                     </div>
                 {% empty %}
-                    <p>no comment yet</p>
+                    <p class="comments-empty">No comments yet.</p>
                 {% endfor %}
             </div>
 
-            <!-- New Comment Form -->
-            <div class="card p-3">
-                <h5 class="mb-3">Add Your Comment</h5>
+            <div class="comment-form-card">
+                <h3 class="comment-form-title">Add Your Comment</h3>
                 {% if user.is_authenticated %}
                     {% if not user_comment %}
-                        <form id="commentForm" class="row g-3 align-items-end" method="POST">
+                        <form id="commentForm" class="comment-form" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="form_type" value="comment">
-                            <div class="rating-wrapper mb-3">
-                                <label class="form-label d-block mb-2">Your Rating <span
-                                        class="text-danger">*</span></label>
-
-                                <div class="star-rating" style="font-size: 35px; cursor: pointer;">
+                            {% if form.rating.errors %}
+                                <p class="comment-form-error">{{ form.rating.errors.0 }}</p>
+                            {% endif %}
+                            <div class="rating-wrapper">
+                                <label class="comment-form-label">Your Rating <span class="required">*</span></label>
+                                <div class="star-rating">
                                     <span data-value="1" class="star">&#9733;</span>
                                     <span data-value="2" class="star">&#9733;</span>
                                     <span data-value="3" class="star">&#9733;</span>
                                     <span data-value="4" class="star">&#9733;</span>
                                     <span data-value="5" class="star">&#9733;</span>
                                 </div>
-
-                                <input type="hidden" name="rating" id="rating-value">
+                                <input type="hidden" name="rating" id="rating-value" value="{{ form.rating.value|default:'' }}">
                             </div>
-
-
-                            <div class="col-12">
-                                <label for="commentText" class="form-label">Comment (optional)</label>
+                            <div class="comment-form-group">
+                                <label for="commentText" class="comment-form-label">Comment (optional)</label>
                                 {{ form.comment }}
                             </div>
-
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-success">Submit Comment</button>
-                            </div>
+                            <button type="submit" class="btn-product btn-product-success">Submit Comment</button>
                         </form>
                     {% else %}
-                        <p style="color:green; font-weight:bold;">
-                            you have commented on this product before
-                        </p>
-                        <h3>your comment:</h3>
-                        <div class="comments-scroll mb-4" id="commentsScroll">
+                        <p class="user-comment-notice">You have already commented on this product.</p>
+                        <h4 class="your-comment-heading">Your comment</h4>
+                        <div class="comments-scroll comments-scroll--single">
                             <div class="comment-box">
-                                {% for i in "12345"|make_list %}
-                                    {% if forloop.counter <= user_comment.rating %}
-                                        <span class="rating active">&#9733;</span>
-                                    {% else %}
-                                        <span class="rating">&#9734;</span>
-                                    {% endif %}
-                                {% endfor %}
-                                <p>{{ user_comment.user }}</p>
-                                <p>{{ user_comment.comment }}</p>
-                                <small>{{ user_comment.created_at|date:"Y/m/d H:i" }}</small>
+                                <div class="comment-rating">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= user_comment.rating %}
+                                            <span class="rating active">&#9733;</span>
+                                        {% else %}
+                                            <span class="rating">&#9734;</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <p class="comment-author">{{ user_comment.user }}</p>
+                                <p class="comment-body">{{ user_comment.comment }}</p>
+                                <time class="comment-date">{{ user_comment.created_at|date:"Y/m/d H:i" }}</time>
                             </div>
                         </div>
-
                     {% endif %}
                 {% else %}
                     <div id="comment-area-guest">
-                        <button id="guestCommentBtn" class="btn btn-warning">add comment</button>
-                        <p id="login-warning" style="display:none; color:red; margin-top:10px;">
-                            you should login or register first
-                        </p>
+                        <button id="guestCommentBtn" class="btn-product btn-product-warning">Add comment</button>
+                        <p id="comment-login-warning" class="comment-login-warning" style="display: none;">To add a comment you must log in first.</p>
                     </div>
                 {% endif %}
             </div>
-        </div>
+        </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,91 +1,46 @@
-(function () {
-    const carousel = document.getElementById('heroCarousel');
-    if (!carousel) return;
+document.addEventListener("DOMContentLoaded", function () {
 
-    const slides = carousel.querySelectorAll('.carousel-inner > a');
-    const indicatorsContainer = document.getElementById('heroIndicators');
-    const prevBtn = document.getElementById('heroPrev');
-    const nextBtn = document.getElementById('heroNext');
+    const slides = document.querySelectorAll(".hero-slide");
+    const indicators = document.getElementById("heroIndicators");
+    const prev = document.getElementById("heroPrev");
+    const next = document.getElementById("heroNext");
+
+    if (!slides.length) return;
 
     let current = 0;
-    let autoPlay = true;
-    const intervalTime = 4000;
-    let timer = null;
+
+    function show(index) {
+        slides.forEach(s => s.classList.remove("active"));
+        indicators.querySelectorAll("span")
+            .forEach(d => d.classList.remove("active"));
+
+        slides[index].classList.add("active");
+        indicators.children[index].classList.add("active");
+    }
+
+    function nextSlide() {
+        current = (current + 1) % slides.length;
+        show(current);
+    }
+
+    function prevSlide() {
+        current = (current - 1 + slides.length) % slides.length;
+        show(current);
+    }
 
     slides.forEach((_, i) => {
-        const btn = document.createElement('button');
-        btn.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-        if (i === 0) btn.classList.add('active');
-        btn.addEventListener('click', () => {
-            showSlide(i);
-            resetTimer();
+        const dot = document.createElement("span");
+        dot.addEventListener("click", () => {
+            current = i;
+            show(current);
         });
-        indicatorsContainer.appendChild(btn);
+        indicators.appendChild(dot);
     });
 
-    const indicators = indicatorsContainer.querySelectorAll('button');
+    show(0);
 
-    function showSlide(index) {
-        const newIndex = (index + slides.length) % slides.length;
-        if (newIndex === current) return;
-        slides[current].classList.remove('active');
-        indicators[current].classList.remove('active');
+    next.addEventListener("click", nextSlide);
+    prev.addEventListener("click", prevSlide);
 
-        slides[newIndex].classList.add('active');
-        indicators[newIndex].classList.add('active');
-
-        current = newIndex;
-    }
-
-    prevBtn.addEventListener('click', () => {
-        showSlide(current - 1);
-        resetTimer();
-    });
-
-    nextBtn.addEventListener('click', () => {
-        showSlide(current + 1);
-        resetTimer();
-    });
-
-    function autoNext() {
-        showSlide(current + 1);
-    }
-
-    function startTimer() {
-        if (timer) clearInterval(timer);
-        timer = setInterval(() => {
-            if (autoPlay) autoNext();
-        }, intervalTime);
-    }
-
-    function resetTimer() {
-        startTimer();
-    }
-
-    carousel.addEventListener('mouseenter', () => autoPlay = false);
-    carousel.addEventListener('mouseleave', () => autoPlay = true);
-
-    slides.forEach((s, i) => {
-        if (i === 0) s.classList.add('active');
-        else s.classList.remove('active');
-    });
-    startTimer();
-})();
-
-function scrollRow(rowId, direction) {
-    const row = document.getElementById(rowId);
-    if (!row) return;
-    const card = row.querySelector('.product-card');
-    const cardWidth = card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(row).gap || 16) : 240;
-    const scrollAmount = cardWidth * 2 * direction;
-    row.scrollBy({left: scrollAmount, behavior: 'smooth'});
-}
-
-(function syncCartCounts() {
-    const mainCount = document.getElementById('cartCount');
-    const footerCount = document.getElementById('footerCartCount');
-    if (mainCount && footerCount) {
-        footerCount.textContent = mainCount.textContent;
-    }
-})();
-
+    setInterval(nextSlide, 5000);
+});

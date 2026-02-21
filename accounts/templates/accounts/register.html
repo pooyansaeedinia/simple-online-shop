@@ -23,6 +23,7 @@
 
 {% block contents %}
     <div class="auth-box">
+        <a href="{% url 'home_app:home' %}" class="auth-back-btn">← Back to Home</a>
         <h2 class="auth-title">Create a New Account</h2>
         {% if form.non_field_errors %}
             {% for error in form.non_field_errors %}

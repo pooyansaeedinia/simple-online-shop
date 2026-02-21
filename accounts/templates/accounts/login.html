@@ -22,6 +22,7 @@
 
 {% block contents %}
     <div class="auth-box">
+        <a href="{% url 'home_app:home' %}" class="auth-back-btn">← Back to Home</a>
         <h2 class="auth-title">Login to Your Account</h2>
         <form method="post">
             {% csrf_token %}

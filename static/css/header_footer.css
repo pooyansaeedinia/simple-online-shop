@@ -4,8 +4,8 @@
     --accent: #6f42c1;
     --nav-height: 64px;
 }
-/* Modern Background */
-
+/* Modern Background – Inter font for all pages */
+html,
 body {
     font-family: 'Inter', sans-serif;
     background: linear-gradient(
@@ -15,6 +15,8 @@ body {
         #f1f5f9 100%
     );
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* subtle pattern overlay */
@@ -28,36 +30,14 @@ body::before {
     z-index: -1;
 }
 
-/* ---------- Wrapper to make footer sticky ---------- */
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-/* ---------- Main content should grow ---------- */
 main {
-    flex: 1; /* این قسمت باعث میشه محتوا کل فضای خالی رو پر کنه */
+    flex: 1;
 }
 
-/*header*/
-/* Navbar base */
-.navbar-custom {
-    background: var(--primary);
-    min-height: var(--nav-height);
-    padding-top: .45rem;
-    padding-bottom: .45rem;
-}
-
-/* Brand */
-.navbar-brand {
-    font-weight: 700;
-    letter-spacing: .4px;
-    color: #fff;
-}
-
-/* Nav link overrides to ensure visibility on primary bg */
+/* Header – same height on all pages */
 .zentrix-navbar {
     background: #ffffff;
+    min-height: var(--nav-height);
     padding: 18px 0;
     box-shadow: 0 4px 25px rgba(0,0,0,0.04);
     position: sticky;
@@ -113,7 +93,6 @@ main {
     border: 1px solid #e2e8f0;
     width: 240px;
     transition: 0.3s;
-    font-family: 'Inter', sans-serif;
 }
 
 .nav-search input:focus {
@@ -240,3 +219,5 @@ main {
     font-size: 13px;
     color: #94a3b8;
 }
+
+/*==================================================*/
