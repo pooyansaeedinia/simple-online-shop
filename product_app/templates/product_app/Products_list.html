@@ -21,7 +21,7 @@
 
         <div class="products-grid">
             {% if pk == 1 %}
-                {% for product in all_products %}
+                {% for product in products %}
                     {% if product.final_price != product.price %}
                         <article class="product-card-wrap">
                             <a href="{% url 'product_app:product_details' pk=product.id %}" class="product-card-modern">

@@ -5,40 +5,39 @@ from cart.models import Cart, CartItem
 from home_app.models import Discount
 from product_app.forms import CommentForm
 from product_app.models import Product, Category, Comments
+from django.db.models import Q
 
 
 # Create your views here.
 def product_list(request, pk):
     query = request.GET.get('q')
-    all_products = Product.objects.all()
     discounts = Discount.objects.filter(is_active=True)
-    discounted_products = []
-    for discount in discounts:
-        discounted_products.append(discount.product)
-    if pk == 0:
-        if query:
-            product_query = Product.objects.filter(name__icontains=query)
-        else:
-            product_query = Product.objects.all()
-    elif pk == 1:
-        if query:
-            product_query = Product.objects.filter(name__icontains=query)
-        else:
-            product_query = Discount.objects.filter(is_active=True)
-    else:
-        if query:
-            product_query = Product.objects.filter(name__icontains=query)
-        else:
-            product_query = Product.objects.filter(category=pk)
-    paginator = Paginator(product_query, 20)
+    discounted_products = [discount.product for discount in discounts]
+
+    product_query = Product.objects.all()
+
+    if query:
+        product_query = product_query.filter(
+            Q(name__icontains=query) |
+            Q(brand__name__icontains=query) |
+            Q(category__name__icontains=query)
+        )
+
+    if pk == 1:
+        product_query = product_query.filter(discount__is_active=True)
+
+    elif pk != 0 and pk != 1:
+        product_query = product_query.filter(category=pk)
+
+    paginator = Paginator(product_query.distinct(), 20)
     page = request.GET.get('page')
     products = paginator.get_page(page)
+
     context = {
         'products': products,
         'query': query,
         'pk': pk,
         'discounted_products': discounted_products,
-        'all_products': all_products
     }
 
     return render(request, 'product_app/Products_list.html', context)
