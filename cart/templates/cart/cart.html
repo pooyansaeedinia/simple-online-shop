@@ -1,98 +1,218 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Cart{% endblock title %}
+{% block title %}Shopping Cart | Zentrix{% endblock title %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 {% endblock head %}
 
 {% block contents %}
-    <div class="container cart-page">
+<div class="cart-page">
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <div class="cart-breadcrumb">
+            <a href="{% url 'home_app:home' %}">Home</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>Cart</span>
+        </div>
+
+        <!-- Header -->
         <header class="cart-header">
             <h1 class="cart-title">Your Shopping Cart</h1>
+            {% if cart_items %}
+                <span class="cart-item-count">{{ total_items }} item{{ total_items|pluralize }}</span>
+            {% endif %}
         </header>
 
         {% if cart_items %}
-            <form method="post" class="cart-form">
-                {% csrf_token %}
+            <div class="cart-layout">
+                <!-- Cart Items List -->
+                <div class="cart-items-container">
+                    <div class="cart-items-header">
+                        <div class="cart-header-product">Product</div>
+                        <div class="cart-header-price">Price</div>
+                        <div class="cart-header-quantity">Quantity</div>
+                        <div class="cart-header-total">Total</div>
+                        <div class="cart-header-action"></div>
+                    </div>
 
-                <ul class="cart-list">
-                    {% for item in cart_items %}
-                        <li class="cart-item">
-                            <a href="{% url 'product_app:product_details' pk=item.product.id %}" class="cart-item-img-link">
-                                <img src="{{ item.product.image.url }}" class="cart-item-img" alt="{{ item.product.name }}">
-                            </a>
-                            <div class="cart-item-details">
-                                <h3 class="cart-item-title">
-                                    <a href="{% url 'product_app:product_details' pk=item.product.id %}">{{ item.product.name }}</a>
-                                </h3>
-                                <p class="cart-item-unit">Unit price: ${{ item.unit_price }}</p>
-                                <div class="cart-item-actions">
-                                    <label class="cart-item-qty-label">Quantity:</label>
-                                    <input type="number" name="qty_{{ item.id }}" value="{{ item.quantity }}" min="1" class="cart-item-qty-input">
-                                    <a href="{% url 'product_app:product_details' pk=item.product.id %}" class="cart-btn cart-btn-outline">View Product</a>
+                    <ul class="cart-list">
+                        {% for item in cart_items %}
+                            <li class="cart-item" data-item-id="{{ item.id }}" data-price="{{ item.unit_price }}">
+                                <div class="cart-item-product">
+                                    <a href="{% url 'product_app:product_details' pk=item.product.id %}" class="cart-item-img-link">
+                                        <img src="{{ item.product.image.url }}" class="cart-item-img" alt="{{ item.product.name }}">
+                                    </a>
+                                    <div class="cart-item-info">
+                                        <h3 class="cart-item-title">
+                                            <a href="{% url 'product_app:product_details' pk=item.product.id %}">{{ item.product.name }}</a>
+                                        </h3>
+                                        <p class="cart-item-unit">{{ item.product.brand|default:"Zentrix" }}</p>
+                                    </div>
                                 </div>
-                                {% if item.error_message %}
-                                    <p class="cart-item-error">{{ item.error_message }}</p>
-                                {% endif %}
-                                <p class="cart-item-total">Total: ${{ item.total_price }}</p>
-                            </div>
-                            <button type="button" onclick="window.location.href='{% url 'cart:delete_cart_item' item.id %}'" class="cart-item-delete" aria-label="Remove item">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </li>
-                    {% endfor %}
-                </ul>
 
-                <div class="cart-summary">
-                    <div class="cart-summary-row">
-                        <span>Total items</span>
-                        <strong>{{ total_items }}</strong>
-                    </div>
-                    <div class="cart-summary-row cart-summary-total">
-                        <span>Total price</span>
-                        <strong>${{ total_price }}</strong>
-                    </div>
-                    <div class="cart-summary-actions">
-                        <button type="submit" class="cart-btn cart-btn-primary">Save Changes</button>
-                        <a href="{% url 'cart:checkout_page' %}" class="cart-btn cart-btn-success">Go to Checkout</a>
+                                <div class="cart-item-price">
+                                    <span class="cart-price-label">Price:</span>
+                                    ${{ item.unit_price }}
+                                </div>
+
+                                <div class="cart-item-quantity">
+                                    <span class="cart-qty-label">Qty:</span>
+                                    <div class="quantity-control">
+                                        <button type="button" class="quantity-btn quantity-minus"
+                                                {% if item.quantity <= 1 %}disabled{% endif %}
+                                                data-item-id="{{ item.id }}"
+                                                data-action="decrease">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="number" class="quantity-input"
+                                               value="{{ item.quantity }}"
+                                               min="1"
+                                               readonly
+                                               data-item-id="{{ item.id }}">
+                                        <button type="button" class="quantity-btn quantity-plus"
+                                                data-item-id="{{ item.id }}"
+                                                data-action="increase">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="cart-item-total">
+                                    <span class="cart-total-label">Total:</span>
+                                    <span class="cart-total-amount" id="total-{{ item.id }}">${{ item.total_price }}</span>
+                                </div>
+
+                                <div class="cart-item-actions">
+                                    <a href="{% url 'cart:delete_cart_item' item.id %}" class="cart-item-delete" aria-label="Remove item">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+
+                                {% if item.error_message %}
+                                    <div class="cart-item-error">
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                        {{ item.error_message }}
+                                    </div>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Cart Actions -->
+                    <div class="cart-actions">
+                        <a href="{% url 'product_app:product_list' pk=0 %}" class="cart-btn cart-btn-outline">
+                            <i class="bi bi-arrow-left"></i>
+                            Continue Shopping
+                        </a>
+                        <button type="button" class="cart-btn cart-btn-outline" id="clearCartBtn">
+                            <i class="bi bi-trash"></i>
+                            Clear Cart
+                        </button>
                     </div>
                 </div>
-            </form>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <h3 class="cart-summary-title">Order Summary</h3>
+
+                    <div class="cart-summary-row">
+                        <span>Subtotal</span>
+                        <span class="cart-summary-value" id="summary-subtotal">${{ total_price }}</span>
+                    </div>
+
+                    <div class="cart-summary-row">
+                        <span>Shipping</span>
+                        <span class="cart-summary-value">Calculated at checkout</span>
+                    </div>
+
+                    <div class="cart-summary-row">
+                        <span>Tax</span>
+                        <span class="cart-summary-value">Calculated at checkout</span>
+                    </div>
+
+                    <div class="cart-summary-total">
+                        <span>Total</span>
+                        <strong class="cart-summary-grand" id="summary-total">${{ total_price }}</strong>
+                    </div>
+
+                    <div class="cart-summary-actions">
+                        <a href="{% url 'cart:checkout_page' %}" class="cart-btn cart-btn-success">
+                            <i class="bi bi-lock-fill"></i>
+                            Proceed to Checkout
+                        </a>
+                    </div>
+
+                    <!-- Accepted Payment Methods -->
+                    <div class="cart-payment-methods">
+                        <span>We accept:</span>
+                        <div class="payment-icons">
+                            <i class="bi bi-credit-card"></i>
+                            <i class="bi bi-paypal"></i>
+                            <i class="bi bi-currency-bitcoin"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% else %}
+            <!-- Empty Cart -->
             <div class="cart-empty">
-                <p>Your cart is empty.</p>
-                <a href="{% url 'product_app:product_list' pk=0 %}" class="cart-btn cart-btn-primary">Browse Products</a>
+                <div class="cart-empty-icon">
+                    <i class="bi bi-cart-x"></i>
+                </div>
+                <h2>Your cart is empty</h2>
+                <p>Looks like you haven't added anything to your cart yet.</p>
+                <a href="{% url 'product_app:product_list' pk=0 %}" class="cart-btn cart-btn-primary">
+                    <i class="bi bi-shop"></i>
+                    Start Shopping
+                </a>
             </div>
         {% endif %}
 
+        <!-- Recommended Products -->
         <section class="cart-recommended">
             <div class="cart-recommended-header">
-                <h2 class="cart-recommended-title">Recommended for you</h2>
-                <a href="{% url 'product_app:product_list' pk=0 %}" class="cart-recommended-link">View All</a>
+                <h2 class="cart-recommended-title">You might also like</h2>
+                <a href="{% url 'product_app:product_list' pk=0 %}" class="cart-recommended-link">
+                    View All <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
             <div class="cart-recommended-scroll">
-                {% for product in products %}
+                {% for product in products|slice:":8" %}
                     <div class="cart-recommended-card">
                         <a href="{% url 'product_app:product_details' pk=product.id %}" class="cart-recommended-card-link">
                             <div class="cart-recommended-img-wrap">
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
                             </div>
                             <div class="cart-recommended-info">
-                                <h4 class="cart-recommended-name">{{ product.name }}</h4>
-                                <p class="cart-recommended-price">${{ product.price }}</p>
+                                <h4 class="cart-recommended-name">{{ product.name|truncatechars:30 }}</h4>
+                                <div class="cart-recommended-price">
+                                    {% if product.final_price != product.price %}
+                                        <span class="price-old">${{ product.price }}</span>
+                                        <span class="price-current">${{ product.final_price }}</span>
+                                    {% else %}
+                                        <span class="price-current">${{ product.price }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </a>
                         <div class="cart-recommended-actions">
-                            <a href="{% url 'product_app:product_details' pk=product.id %}" class="cart-btn cart-btn-sm cart-btn-outline">Details</a>
-                            <a href="{% url 'cart:add_to_cart' pk=product.id %}" class="cart-btn cart-btn-sm cart-btn-primary">Add</a>
+                            <a href="{% url 'product_app:product_details' pk=product.id %}" class="cart-btn cart-btn-sm cart-btn-outline">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'cart:add_to_cart' pk=product.id %}" class="cart-btn cart-btn-sm cart-btn-primary">
+                                <i class="bi bi-cart-plus"></i>
+                            </a>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         </section>
     </div>
-    <script src="{% static 'js/cart.js' %}"></script>
+</div>
+
+<script src="{% static 'js/cart.js' %}"></script>
 {% endblock contents %}

@@ -2,222 +2,227 @@
 {% load static %}
 
 {% block title %}
-    SimpleShop
+    Zentrix - Modern Tech Store
 {% endblock title %}
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 {% endblock head %}
 
-
 {% block contents %}
+    <!-- Main container -->
+    <main class="container py-4 py-md-5">
 
-<!-- Main container -->
-<main class="container py-5">
-
-    {% if banners %}
-    <!-- Hero Section -->
-    <section class="mb-5 hero-section">
-    <div id="heroCarousel" class="modern-hero">
-
-        <div class="hero-slides">
-
-            {% for banner in banners %}
-            <div class="hero-slide {% if forloop.first %}active{% endif %}">
-                <a href="{{ banner.link }}" class="d-block">
-                    <img src="{{ banner.image.url }}"
-                         alt="{{ banner.title }}"
-                         class="hero-banner">
-
-                    <div class="modern-caption">
-                        <h2>{{ banner.description }}</h2>
-                        <p>{{ banner.small_description }}</p>
+        {% if banners %}
+            <!-- Hero Section -->
+            <section class="mb-5 hero-section">
+                <div id="heroCarousel" class="modern-hero">
+                    <div class="hero-slides">
+                        {% for banner in banners %}
+                            <div class="hero-slide {% if forloop.first %}active{% endif %}">
+                                <a href="{{ banner.link }}" class="d-block">
+                                    <img src="{{ banner.image.url }}"
+                                         alt="{{ banner.title }}"
+                                         class="hero-banner"
+                                         loading="eager"> <!-- لود سریع برای اولین تصویر -->
+                                    <div class="modern-caption">
+                                        <span class="badge bg-primary mb-2">New Arrival</span>
+                                        <h2>{{ banner.description }}</h2>
+                                        <p>{{ banner.small_description }}</p>
+                                        <span class="shop-now">Shop Now →</span>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
                     </div>
-                </a>
+
+                    <button id="heroPrev" class="modern-control prev" aria-label="Previous slide">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button id="heroNext" class="modern-control next" aria-label="Next slide">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+
+                    <div id="heroIndicators" class="modern-indicators"></div>
+                </div>
+            </section>
+        {% endif %}
+
+        <!-- Discounted Products -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="section-title mb-1">Special Discount Products</h3>
+                    <p class="text-muted">Limited time offers</p>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{% url 'product_app:product_list' pk=1 %}"
+                       class="view-all-link">View All <i class="bi bi-arrow-right"></i></a>
+
+                    <div class="scroll-controls">
+                        <button type="button"
+                                class="btn btn-light btn-scroll-modern"
+                                onclick="scrollRow('discountProducts', -1)"
+                                aria-label="Scroll left">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button type="button"
+                                class="btn btn-light btn-scroll-modern"
+                                onclick="scrollRow('discountProducts', 1)"
+                                aria-label="Scroll right">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            {% endfor %}
 
-        </div>
-
-        <button id="heroPrev" class="modern-control prev">‹</button>
-        <button id="heroNext" class="modern-control next">›</button>
-
-        <div id="heroIndicators" class="modern-indicators"></div>
-
-    </div>
-</section>
-    {% endif %}
-
-
-    <!-- ========================= -->
-    <!-- Discounted Products -->
-    <!-- ========================= -->
-    <section class="mb-5">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="section-title mb-0">Special Discount Products</h3>
-
-            <div class="d-flex align-items-center gap-2">
-                <a href="{% url 'product_app:product_list' pk=1 %}"
-                   class="view-all-link">View all</a>
-
-                <button type="button"
-                        class="btn btn-sm btn-light btn-scroll-modern"
-                        onclick="scrollRow('discountProducts', -1)">‹</button>
-
-                <button type="button"
-                        class="btn btn-sm btn-light btn-scroll-modern"
-                        onclick="scrollRow('discountProducts', 1)">›</button>
+            <div id="discountProducts"
+                 class="products-row"
+                 aria-label="discount products">
+                {% if discounted_products %}
+                    {% for product in products %}
+                        {% if product.final_price != product.price %}
+                            <div class="card product-card modern-card">
+                                <span class="badge discount-badge-modern">-{{ product.discount_percent }}%</span>
+                                <a class="card-link text-decoration-none"
+                                   href="{% url 'product_app:product_details' pk=product.id %}">
+                                    <img class="card-img-top modern-img"
+                                         src="{{ product.image.url }}"
+                                         alt="{{ product.name }}"
+                                         loading="lazy">
+                                    <div class="card-body">
+                                        <h6 class="product-title">{{ product.name }}</h6>
+                                        <p class="product-desc">{{ product.description|truncatechars:40 }}</p>
+                                        <div class="card-price-row">
+                                            <div>
+                                                <small class="old-price me-2">${{ product.price }}</small>
+                                                <span class="final-price">${{ product.final_price }}</span>
+                                            </div>
+                                            <button class="btn btn-primary btn-sm modern-btn"
+                                                    type="button"
+                                                    onclick="location.href='{% url 'product_app:product_details' pk=product.id %}'">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted w-100 text-center py-5">No discounted products available</p>
+                {% endif %}
             </div>
-        </div>
+        </section>
 
-        <div id="discountProducts"
-             class="products-row"
-             aria-label="discount products">
+        <!-- New Arrivals -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="section-title mb-1">New Arrivals</h3>
+                    <p class="text-muted">Latest products just for you</p>
+                </div>
 
-            {% if discounted_products %}
-                {% for product in products %}
-                    {% if product.final_price != product.price %}
-                    <div class="card product-card modern-card border-0 position-relative">
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{% url 'product_app:product_list' pk=0 %}"
+                       class="view-all-link">View All <i class="bi bi-arrow-right"></i></a>
 
-                        <span class="badge discount-badge-modern">Sale</span>
+                    <div class="scroll-controls">
+                        <button type="button"
+                                class="btn btn-light btn-scroll-modern"
+                                onclick="scrollRow('newProducts', -1)"
+                                aria-label="Scroll left">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button type="button"
+                                class="btn btn-light btn-scroll-modern"
+                                onclick="scrollRow('newProducts', 1)"
+                                aria-label="Scroll right">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <div id="newProducts"
+                 class="products-row"
+                 aria-label="new products">
+                {% for product in new_products %}
+                    <div class="card product-card modern-card">
+                        {% if product.final_price != product.price %}
+                            <span class="badge discount-badge-modern">-{{ product.discount_percent }}%</span>
+                        {% endif %}
                         <a class="card-link text-decoration-none"
                            href="{% url 'product_app:product_details' pk=product.id %}">
-
                             <img class="card-img-top modern-img"
                                  src="{{ product.image.url }}"
-                                 alt="{{ product.name }} image"
+                                 alt="{{ product.name }}"
                                  loading="lazy">
-
-                            <div class="card-body d-flex flex-column">
-
-                                <h6 class="product-title">
-                                    {{ product.name }}
-                                </h6>
-
-                                <p class="product-desc">
-                                    {{ product.description|truncatechars:50 }}
-                                </p>
-
-                                <div class="card-price-row mt-auto d-flex justify-content-between align-items-center">
-
-                                    <div>
-                                        <small class="old-price me-2">
-                                            ${{ product.price }}
-                                        </small>
-                                        <span class="final-price">
-                                            ${{ product.final_price }}
-                                        </span>
-                                    </div>
-
+                            <div class="card-body">
+                                <h6 class="product-title">{{ product.name }}</h6>
+                                <p class="product-desc">{{ product.description|truncatechars:40 }}</p>
+                                <div class="card-price-row">
+                                    {% if product.final_price != product.price %}
+                                        <div>
+                                            <small class="old-price me-2">${{ product.price }}</small>
+                                            <span class="final-price">${{ product.final_price }}</span>
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <span class="final-price">${{ product.price }}</span>
+                                        </div>
+                                    {% endif %}
                                     <button class="btn btn-primary btn-sm modern-btn"
                                             type="button"
                                             onclick="location.href='{% url 'product_app:product_details' pk=product.id %}'">
-                                        View
+                                        <i class="bi bi-eye"></i>
                                     </button>
-
                                 </div>
                             </div>
                         </a>
                     </div>
-                    {% endif %}
+                {% empty %}
+                    <p class="text-muted w-100 text-center py-5">No new products available</p>
                 {% endfor %}
-            {% else %}
-                <p class="text-muted">No discounted product</p>
-            {% endif %}
-        </div>
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- New Arrivals -->
-    <!-- ========================= -->
-    <section class="mb-5">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="section-title mb-0">New Arrivals</h3>
-
-            <div class="d-flex align-items-center gap-2">
-                <a href="{% url 'product_app:product_list' pk=0 %}"
-                   class="view-all-link">View all</a>
-
-                <button type="button"
-                        class="btn btn-sm btn-light btn-scroll-modern"
-                        onclick="scrollRow('newProducts', -1)">‹</button>
-
-                <button type="button"
-                        class="btn btn-sm btn-light btn-scroll-modern"
-                        onclick="scrollRow('newProducts', 1)">›</button>
             </div>
-        </div>
+        </section>
 
-        <div id="newProducts"
-             class="products-row"
-             aria-label="new products">
-
-            {% for product in new_products %}
-            <div class="card product-card modern-card border-0 position-relative">
-
-                {% if product.final_price != product.price %}
-                <span class="badge discount-badge-modern">Sale</span>
-                {% endif %}
-
-                <a class="card-link text-decoration-none"
-                   href="{% url 'product_app:product_details' pk=product.id %}">
-
-                    <img class="card-img-top modern-img"
-                         src="{{ product.image.url }}"
-                         alt="{{ product.name }} image"
-                         loading="lazy">
-
-                    <div class="card-body d-flex flex-column">
-
-                        <h6 class="product-title">
-                            {{ product.name }}
-                        </h6>
-
-                        <p class="product-desc">
-                            {{ product.description|truncatechars:100 }}
-                        </p>
-
-                        <div class="card-price-row mt-auto d-flex justify-content-between align-items-center">
-
-                            {% if product.final_price != product.price %}
-                            <div>
-                                <small class="old-price me-2">
-                                    ${{ product.price }}
-                                </small>
-                                <span class="final-price">
-                                    ${{ product.final_price }}
-                                </span>
-                            </div>
-                            {% else %}
-                            <div>
-                                <span class="final-price">
-                                    ${{ product.price }}
-                                </span>
-                            </div>
-                            {% endif %}
-
-                            <button class="btn btn-primary btn-sm modern-btn"
-                                    type="button"
-                                    onclick="location.href='{% url 'product_app:product_details' pk=product.id %}'">
-                                View
-                            </button>
-
-                        </div>
+        <!-- Features Section -->
+        <section class="features-section py-5">
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <div class="feature-card">
+                        <i class="bi bi-truck"></i>
+                        <h6>Free Shipping</h6>
+                        <p>On orders over $50</p>
                     </div>
-                </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="feature-card">
+                        <i class="bi bi-shield-check"></i>
+                        <h6>Secure Payment</h6>
+                        <p>100% secure</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="feature-card">
+                        <i class="bi bi-arrow-repeat"></i>
+                        <h6>30 Days Return</h6>
+                        <p>Easy returns</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="feature-card">
+                        <i class="bi bi-headset"></i>
+                        <h6>24/7 Support</h6>
+                        <p>Always here to help</p>
+                    </div>
+                </div>
             </div>
-            {% empty %}
-            <p class="text-muted">No new product</p>
-            {% endfor %}
+        </section>
 
-        </div>
-    </section>
+    </main>
 
-</main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/homepage.js' %}"></script>
 {% endblock contents %}

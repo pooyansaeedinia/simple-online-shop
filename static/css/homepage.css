@@ -1,273 +1,573 @@
 /* ================================================= */
-/* ZENTRIX HOME PAGE – FINAL CLEAN VERSION */
+/* ZENTRIX HOME PAGE – MODERN & RESPONSIVE */
 /* ================================================= */
 
-
-/* ========================= */
-/* GLOBAL */
-/* ========================= */
-
+/* ==================== GLOBAL ==================== */
 main {
     width: 100%;
+    overflow-x: hidden;
 }
 
-/* ========================= */
-/* SECTION TITLES */
-/* ========================= */
-
+/* Section Titles */
 .section-title {
-    font-weight: 600;
-    font-size: 1.6rem;
+    font-weight: 700;
+    font-size: 1.8rem;
     letter-spacing: -0.5px;
-    position: relative;
-    margin-bottom: 0;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.25rem;
 }
-
-.section-title::after {
-    content: "";
-    width: 45px;
-    height: 3px;
-    background: #2563eb;
-    display: block;
-    margin-top: 8px;
-    border-radius: 3px;
-}
-
-
-/* ================================================= */
-/* HERO SECTION */
-/* ================================================= */
-
-/* ========================= */
-/* HERO ABSOLUTE SAFE VERSION */
-/* ========================= */
-
+/* ==================== HERO SECTION (بدون سایه) ==================== */
 .modern-hero {
     position: relative;
     width: 100%;
-    border-radius: 20px;
+    border-radius: 24px;
     overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
 .hero-slides {
     position: relative;
     width: 100%;
+    height: 500px;
 }
 
-/* همه اسلایدها روی هم */
+/* همه اسلایدها بصورت absolute روی هم قرار می‌گیرن */
 .hero-slide {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
 }
 
-/* فقط اسلاید فعال دیده شود */
+/* فقط اسلاید active نمایش داده میشه */
 .hero-slide.active {
-    position: relative;
     opacity: 1;
     z-index: 2;
 }
 
+.hero-slide a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 .hero-banner {
     width: 100%;
-    height: 500px;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
 
-/* overlay */
-.modern-hero::before {
+/* سایه رو کامل حذف کردیم */
+/* .modern-hero::before {
     content: "";
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(90deg,
-        rgba(0,0,0,0.55),
-        rgba(0,0,0,0.15));
-    z-index: 1;
-}
+        rgba(0,0,0,0.6) 0%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0) 100%);
+    z-index: 3;
+    pointer-events: none;
+} */
 
-/* caption */
+/* caption - بدون سایه و با پس زمینه نیمه شفاف برای خوانایی بهتر */
 .modern-caption {
     position: absolute;
-    bottom: 60px;
-    left: 60px;
+    bottom: 15%;
+    left: 5%;
     color: white;
-    z-index: 3;
-    max-width: 600px;
+    z-index: 4;
+    max-width: 500px;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* فقط سایه متن برای خوانایی */
 }
 
-/* controls */
+.modern-caption h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.modern-caption p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    opacity: 0.95;
+}
+
+.shop-now {
+    display: inline-block;
+    padding: 8px 24px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(5px);
+    color: white;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.shop-now:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateX(5px);
+}
+
+/* دکمه‌های کنترلی */
 .modern-control {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 4;
-    width: 40px;
-    height: 40px;
+    z-index: 5;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     border: none;
-    background: white;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(5px);
     cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.3);
+    pointer-events: auto;
 }
 
-.modern-control.prev { left: 20px; }
-.modern-control.next { right: 20px; }
+.modern-control:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
 
-/* indicators */
+.modern-control.prev {
+    left: 20px;
+}
+
+.modern-control.next {
+    right: 20px;
+}
+
+/* ایندیکیتورها */
 .modern-indicators {
     position: absolute;
     bottom: 20px;
     right: 30px;
     display: flex;
-    gap: 8px;
-    z-index: 4;
+    gap: 10px;
+    z-index: 5;
+    pointer-events: auto;
 }
 
 .modern-indicators span {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: rgba(255,255,255,0.5);
     cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid transparent;
+    pointer-events: auto;
 }
 
 .modern-indicators span.active {
     background: white;
+    transform: scale(1.2);
+    border-color: #2563eb;
 }
 
+.modern-indicators span:hover {
+    background: white;
+    transform: scale(1.2);
+}
 
-/* ================================================= */
-/* PRODUCTS ROW */
-/* ================================================= */
+/* ریسپانسیو */
+@media (max-width: 992px) {
+    .hero-slides {
+        height: 400px;
+    }
 
+    .modern-caption h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-slides {
+        height: 350px;
+    }
+
+    .modern-control {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .modern-caption h2 {
+        font-size: 1.5rem;
+    }
+
+    .modern-caption p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-slides {
+        height: 300px;
+    }
+
+    .modern-indicators {
+        display: none;
+    }
+
+    .modern-caption {
+        bottom: 10%;
+    }
+
+    .modern-caption h2 {
+        font-size: 1.2rem;
+    }
+
+    .shop-now {
+        padding: 5px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ==================== PRODUCTS ROW ==================== */
 .products-row {
     display: flex;
-    gap: 24px;
+    gap: 20px;
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding-bottom: 10px;
+    padding: 10px 5px 20px;
     width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 .products-row::-webkit-scrollbar {
-    height: 6px;
+    height: 8px;
 }
 
-.products-row::-webkit-scrollbar-thumb {
-    background: #d1d5db;
+.products-row::-webkit-scrollbar-track {
+    background: #f1f5f9;
     border-radius: 10px;
 }
 
+.products-row::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
 
-/* ================================================= */
-/* PRODUCT CARD */
-/* ================================================= */
+.products-row::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
 
+/* Product Card */
 .modern-card {
     flex: 0 0 auto;
     width: 260px;
     border-radius: 20px;
     background: #ffffff;
-    transition: all 0.35s ease;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.6);
 }
 
 .modern-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+    transform: translateY(-12px);
+    box-shadow: 0 25px 50px -12px rgba(37,99,235,0.25);
 }
 
-/* تصویر محصول */
 .modern-img {
     width: 100%;
-    height: 220px;
+    aspect-ratio: 1/1;
     object-fit: cover;
-    transition: 0.4s ease;
+    transition: 0.6s ease;
 }
 
 .modern-card:hover .modern-img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
-
-/* ========================= */
-/* PRODUCT TEXT */
-/* ========================= */
-
+/* Product Text */
 .product-title {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin-bottom: 6px;
     color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .product-desc {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #6b7280;
-    min-height: 42px;
+    min-height: 38px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-
-/* ========================= */
-/* PRICE SYSTEM */
-/* ========================= */
+/* Price System */
+.card-price-row {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .old-price {
     color: #9ca3af;
     text-decoration: line-through;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .final-price {
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
     color: #111827;
 }
 
-
-/* ========================= */
-/* BADGE */
-/* ========================= */
-
+/* Badge */
 .discount-badge-modern {
     position: absolute;
     top: 14px;
     left: 14px;
-    background: #ef4444;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
     color: white;
-    font-size: 0.7rem;
-    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 14px;
     border-radius: 50px;
-    font-weight: 500;
     z-index: 5;
+    box-shadow: 0 4px 10px rgba(239,68,68,0.3);
+    animation: pulse 2s infinite;
 }
 
+@keyframes pulse {
+    0% { box-shadow: 0 4px 10px rgba(239,68,68,0.3); }
+    50% { box-shadow: 0 4px 20px rgba(239,68,68,0.5); }
+    100% { box-shadow: 0 4px 10px rgba(239,68,68,0.3); }
+}
 
-/* ========================= */
-/* BUTTONS */
-/* ========================= */
-
+/* Buttons */
 .modern-btn {
-    border-radius: 10px;
-    padding: 5px 14px;
-    font-size: 0.8rem;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border: none;
+    transition: 0.3s;
+}
+
+.modern-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(37,99,235,0.4);
 }
 
 .view-all-link {
     text-decoration: none;
     font-weight: 500;
     color: #2563eb;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
 }
 
 .view-all-link:hover {
-    text-decoration: underline;
+    gap: 10px;
+    color: #7c3aed;
+}
+
+.scroll-controls {
+    display: flex;
+    gap: 8px;
 }
 
 .btn-scroll-modern {
     border-radius: 50%;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    transition: 0.3s;
+}
+
+.btn-scroll-modern:hover {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+    transform: scale(1.1);
+}
+
+/* Features Section */
+.features-section {
+    background: white;
+    border-radius: 30px;
+    padding: 40px 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+    margin-top: 40px;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.feature-card i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+.feature-card h6 {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #1e293b;
+}
+
+.feature-card p {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 992px) {
+    .hero-slides {
+        aspect-ratio: 16/9;
+    }
+
+    .modern-caption h2 {
+        font-size: 2rem;
+    }
+
+    .modern-caption p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-slides {
+        aspect-ratio: 4/3;
+    }
+
+    .modern-caption {
+        bottom: 10%;
+    }
+
+    .modern-caption h2 {
+        font-size: 1.5rem;
+    }
+
+    .modern-caption p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .shop-now {
+        padding: 6px 18px;
+        font-size: 0.9rem;
+    }
+
+    .modern-control {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .modern-card {
+        width: 220px;
+    }
+
+    .features-section {
+        padding: 30px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-title {
+        font-size: 1.3rem;
+    }
+
+    .hero-slides {
+        aspect-ratio: 3/4;
+    }
+
+    .modern-caption {
+        left: 20px;
+        bottom: 20px;
+    }
+
+    .modern-caption h2 {
+        font-size: 1.2rem;
+    }
+
+    .modern-caption p {
+        font-size: 0.8rem;
+        display: none;
+    }
+
+    .modern-indicators {
+        display: none;
+    }
+
+    .modern-card {
+        width: 180px;
+    }
+
+    .scroll-controls {
+        display: none;
+    }
+
+    .features-section .row {
+        row-gap: 20px;
+    }
+
+    .feature-card i {
+        font-size: 2rem;
+    }
+
+    .feature-card h6 {
+        font-size: 0.9rem;
+    }
+
+    .feature-card p {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .modern-card {
+        width: 160px;
+    }
+
+    .final-price {
+        font-size: 1rem;
+    }
 }

@@ -1,64 +1,125 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Categories{% endblock title %}
+{% block title %}Categories | Zentrix{% endblock title %}
 
 {% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/category.css' %}">
 {% endblock head %}
 
 {% block contents %}
-    <div class="container category-page">
+<div class="category-page">
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <div class="category-breadcrumb">
+            <a href="{% url 'home_app:home' %}">Home</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>Categories</span>
+        </div>
+
+        <!-- Header Section -->
         <header class="category-header">
             <h1 class="category-title">Product Categories</h1>
+            <p class="category-subtitle">Browse our wide range of products by category</p>
         </header>
 
+        <!-- Categories Grid -->
         <div class="category-grid">
             {% for category in categories %}
-                <article class="category-card-wrap">
-                    <a href="{% url 'product_app:product_list' pk=category.id %}" class="category-card">
-                        <div class="category-card-img-wrap">
-                            <img src="{{ category.image.url }}" class="category-card-img" alt="{{ category.name }}">
+                <article class="category-card">
+                    <a href="{% url 'product_app:product_list' pk=category.id %}" class="category-card-link">
+                        <div class="category-image-wrapper">
+                            <img src="{{ category.image.url }}" class="category-image" alt="{{ category.name }}" loading="lazy">
+                            <div class="category-overlay">
+                                <span class="category-view-btn">View Products</span>
+                            </div>
                         </div>
-                        <div class="category-card-body">
-                            <h2 class="category-card-title">{{ category.name }}</h2>
-                            <span class="category-card-cta">View Products</span>
+                        <div class="category-content">
+                            <h2 class="category-name">{{ category.name }}</h2>
+                            <span class="category-product-count">{{ category.product_count|default:"0" }} Products</span>
                         </div>
                     </a>
                 </article>
             {% empty %}
-                <p class="category-empty">No categories yet.</p>
+                <div class="category-empty">
+                    <i class="bi bi-grid"></i>
+                    <h3>No Categories Yet</h3>
+                    <p>Check back later for new categories</p>
+                </div>
             {% endfor %}
         </div>
 
+        <!-- Promo Section -->
         <section class="promo-section">
             <div class="promo-inner">
-                <h2 class="promo-title">Exclusive Deals & Benefits</h2>
-                <p class="promo-desc">Join thousands of smart shoppers who enjoy our discounts, free shipping, and loyalty rewards — all in one place.</p>
+                <div class="promo-header">
+                    <span class="promo-badge">Benefits</span>
+                    <h2 class="promo-title">Exclusive Deals & Benefits</h2>
+                    <p class="promo-desc">Join thousands of smart shoppers who enjoy our discounts, free shipping, and loyalty rewards — all in one place.</p>
+                </div>
+
                 <div class="promo-grid">
                     <div class="promo-card">
-                        <span class="promo-icon">💸</span>
+                        <div class="promo-icon-wrapper">
+                            <span class="promo-icon">💸</span>
+                        </div>
                         <h3 class="promo-card-title">Flash Sales</h3>
                         <p class="promo-card-desc">Save up to 70% on top products every weekend!</p>
+                        <span class="promo-card-link">Learn More <i class="bi bi-arrow-right"></i></span>
                     </div>
+
                     <div class="promo-card">
-                        <span class="promo-icon">🚚</span>
+                        <div class="promo-icon-wrapper">
+                            <span class="promo-icon">🚚</span>
+                        </div>
                         <h3 class="promo-card-title">Free Shipping</h3>
                         <p class="promo-card-desc">Enjoy free delivery on orders over $100.</p>
+                        <span class="promo-card-link">Learn More <i class="bi bi-arrow-right"></i></span>
                     </div>
+
                     <div class="promo-card">
-                        <span class="promo-icon">💎</span>
+                        <div class="promo-icon-wrapper">
+                            <span class="promo-icon">💎</span>
+                        </div>
                         <h3 class="promo-card-title">VIP Club</h3>
                         <p class="promo-card-desc">Earn points & get exclusive early access to new arrivals.</p>
+                        <span class="promo-card-link">Learn More <i class="bi bi-arrow-right"></i></span>
                     </div>
+
                     <div class="promo-card">
-                        <span class="promo-icon">🔁</span>
+                        <div class="promo-icon-wrapper">
+                            <span class="promo-icon">🔁</span>
+                        </div>
                         <h3 class="promo-card-title">Easy Returns</h3>
                         <p class="promo-card-desc">Not satisfied? Get your money back within 7 days.</p>
+                        <span class="promo-card-link">Learn More <i class="bi bi-arrow-right"></i></span>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Newsletter Section (اصلاح شده) -->
+        <section class="newsletter-section">
+            <div class="newsletter-content">
+                <h2>Stay Updated</h2>
+                <p>Subscribe to our newsletter and get the latest updates on new products and exclusive offers</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <div class="newsletter-input-group">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit">
+                            <span>Subscribe</span>
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
     </div>
+</div>
+
+
     <script src="{% static 'js/category.js' %}"></script>
 {% endblock contents %}
+

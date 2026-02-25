@@ -1,80 +1,188 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Checkout{% endblock title %}
+{% block title %}Checkout | Zentrix{% endblock title %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
 {% endblock head %}
 
 {% block contents %}
-    <div class="container checkout-page">
+<div class="checkout-page">
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <div class="checkout-breadcrumb">
+            <a href="{% url 'home_app:home' %}">Home</a>
+            <i class="bi bi-chevron-right"></i>
+            <a href="{% url 'cart:cart' %}">Cart</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>Checkout</span>
+        </div>
+
+        <!-- Header -->
         <header class="checkout-header">
             <h1 class="checkout-title">Checkout</h1>
+            <p class="checkout-subtitle">Complete your purchase</p>
         </header>
 
         {% if cart_items %}
             <div class="checkout-layout">
+                <!-- Order Summary Section -->
                 <div class="checkout-order">
-                    <h2 class="checkout-order-title">Your Order</h2>
-                    <ul class="checkout-order-list">
+                    <div class="checkout-order-header">
+                        <h2 class="checkout-order-title">Your Order</h2>
+                        <span class="checkout-order-count">{{ cart_items|length }} item{{ cart_items|pluralize }}</span>
+                    </div>
+
+                    <div class="checkout-order-items">
                         {% for item in cart_items %}
-                            <li class="checkout-order-item">
-                                <img src="{{ item.product.image.url }}" class="checkout-order-img" alt="{{ item.product.name }}">
-                                <div class="checkout-order-details">
-                                    <h3 class="checkout-order-name">{{ item.product.name }}</h3>
-                                    <p class="checkout-order-meta">Qty: {{ item.quantity }} · ${{ item.unit_price }} each</p>
-                                    <p class="checkout-order-total">${{ item.total_price }}</p>
+                            <div class="checkout-order-item">
+                                <div class="checkout-item-image">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                    <span class="checkout-item-quantity-badge">{{ item.quantity }}</span>
                                 </div>
-                            </li>
+                                <div class="checkout-item-details">
+                                    <h3 class="checkout-item-name">{{ item.product.name }}</h3>
+                                    <p class="checkout-item-meta">{{ item.product.brand|default:"Zentrix" }}</p>
+                                    <div class="checkout-item-pricing">
+                                        <span class="checkout-item-price">${{ item.unit_price }} each</span>
+                                        <span class="checkout-item-total">${{ item.total_price }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
-                    </ul>
+                    </div>
+
                     <div class="checkout-order-summary">
-                        <span>Total</span>
-                        <strong>${{ total_price }}</strong>
+                        <div class="checkout-summary-row">
+                            <span>Subtotal</span>
+                            <span>${{ total_price }}</span>
+                        </div>
+                        <div class="checkout-summary-row">
+                            <span>Shipping</span>
+                            <span class="checkout-shipping-free">Free</span>
+                        </div>
+                        <div class="checkout-summary-row checkout-summary-total">
+                            <span>Total</span>
+                            <strong>${{ total_price }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="checkout-trust-badges">
+                        <div class="trust-badge">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Secure Payment</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="bi bi-truck"></i>
+                            <span>Free Shipping</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="bi bi-arrow-repeat"></i>
+                            <span>Easy Returns</span>
+                        </div>
                     </div>
                 </div>
 
-                <form method="post" class="checkout-form">
+                <!-- Checkout Form -->
+                <form method="post" class="checkout-form" id="checkoutForm" novalidate>
                     {% csrf_token %}
-                    <div class="checkout-form-card">
-                        <h2 class="checkout-form-title">Delivery & Payment</h2>
-                        <div class="checkout-field">
-                            <label class="checkout-label">Full Name</label>
-                            <input type="text" name="fullname" class="checkout-input" required>
+
+                    <div class="checkout-form-section">
+                        <div class="checkout-form-section-header">
+                            <i class="bi bi-person"></i>
+                            <h3>Contact Information</h3>
                         </div>
-                        <div class="checkout-field">
-                            <label class="checkout-label">Address</label>
-                            <textarea name="address" class="checkout-input checkout-textarea" required></textarea>
+
+                        <div class="checkout-form-group">
+                            <label for="fullname">Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullname" name="fullname" class="checkout-input" placeholder="John Doe" required>
+                            <div class="checkout-error-message" id="fullname-error"></div>
                         </div>
-                        <div class="checkout-field">
-                            <label class="checkout-label">Phone</label>
-                            <input type="tel" name="phone" class="checkout-input" required>
+
+                        <div class="checkout-form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" class="checkout-input" placeholder="09123456789" required>
+                            <div class="checkout-error-message" id="phone-error"></div>
                         </div>
-                        <div class="checkout-field">
-                            <label class="checkout-label">Payment Method</label>
-                            <div class="checkout-radio-group">
-                                <label class="checkout-radio">
-                                    <input type="radio" name="payment" value="online" checked>
-                                    <span>Online Payment</span>
-                                </label>
-                                <label class="checkout-radio">
-                                    <input type="radio" name="payment" value="cod">
-                                    <span>Cash on Delivery</span>
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" class="checkout-btn">Confirm Order</button>
                     </div>
+
+                    <div class="checkout-form-section">
+                        <div class="checkout-form-section-header">
+                            <i class="bi bi-geo-alt"></i>
+                            <h3>Shipping Address</h3>
+                        </div>
+
+                        <div class="checkout-form-group">
+                            <label for="address">Address <span class="required">*</span></label>
+                            <textarea id="address" name="address" class="checkout-input checkout-textarea" placeholder="Enter your full address" required></textarea>
+                            <div class="checkout-error-message" id="address-error"></div>
+                        </div>
+                    </div>
+
+                    <div class="checkout-form-section">
+                        <div class="checkout-form-section-header">
+                            <i class="bi bi-credit-card"></i>
+                            <h3>Payment Method</h3>
+                        </div>
+
+                        <div class="checkout-payment-methods">
+                            <label class="checkout-payment-option">
+                                <input type="radio" name="payment" value="online" checked>
+                                <div class="payment-option-content">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                    <div>
+                                        <strong>Online Payment</strong>
+                                        <span>Pay with credit/debit card</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="checkout-payment-option">
+                                <input type="radio" name="payment" value="cod">
+                                <div class="payment-option-content">
+                                    <i class="bi bi-cash"></i>
+                                    <div>
+                                        <strong>Cash on Delivery</strong>
+                                        <span>Pay when you receive</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="checkout-error-message" id="payment-error"></div>
+                    </div>
+
+                    <button type="submit" class="checkout-submit-btn" id="submitBtn">
+                        <span>Confirm Order</span>
+                        <i class="bi bi-lock-fill"></i>
+                    </button>
+
+                    <p class="checkout-terms">
+                        By confirming your order, you agree to our
+                        <a href="#">Terms of Service</a> and
+                        <a href="#">Privacy Policy</a>.
+                    </p>
                 </form>
             </div>
         {% else %}
+            <!-- Empty Cart State -->
             <div class="checkout-empty">
-                <p>Your cart is empty.</p>
-                <a href="{% url 'product_app:product_list' pk=0 %}" class="checkout-btn">Browse Products</a>
+                <div class="checkout-empty-icon">
+                    <i class="bi bi-cart-x"></i>
+                </div>
+                <h2>Your cart is empty</h2>
+                <p>Add some products to your cart before proceeding to checkout.</p>
+                <a href="{% url 'product_app:product_list' pk=0 %}" class="checkout-empty-btn">
+                    <i class="bi bi-shop"></i>
+                    Browse Products
+                </a>
             </div>
         {% endif %}
     </div>
-    <script src="{% static 'js/checkout.js' %}"></script>
+</div>
+
+<script src="{% static 'js/checkout.js' %}"></script>
 {% endblock contents %}

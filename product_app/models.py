@@ -36,7 +36,7 @@ class Product(models.Model):
         return self.name
 
     @property
-    def final_price(self):
+    def final_price(self): 
         if hasattr(self, "discount") and self.discount.is_active:
             return self.discount.new_price
         return self.price
