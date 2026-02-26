@@ -137,8 +137,9 @@
             <!-- Newsletter -->
             <div>
                 <h6>Stay Updated</h6>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Your email">
+                <form class="newsletter-form" action="{% url "home_app:send_email" %}" method="POST">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Your email">
                     <button type="submit"><i class="bi bi-send"></i></button>
                 </form>
             </div>

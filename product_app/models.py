@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -21,6 +23,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def product_count(self):
+        product_count = Product.objects.filter(category=self).count()
+        return product_count
+
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -36,7 +42,7 @@ class Product(models.Model):
         return self.name
 
     @property
-    def final_price(self): 
+    def final_price(self):
         if hasattr(self, "discount") and self.discount.is_active:
             return self.discount.new_price
         return self.price

@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Newsletter form submission
-    const newsletterForm = document.getElementById('newsletterForm');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            if (email) {
-                alert('Thank you for subscribing!');
-                this.querySelector('input[type="email"]').value = '';
-            }
-        });
-    }
+    // // Newsletter form submission
+    // const newsletterForm = document.getElementById('newsletterForm');
+    // if (newsletterForm) {
+    //     newsletterForm.addEventListener('submit', function (e) {
+    //         e.preventDefault();
+    //         const email = this.querySelector('input[type="email"]').value;
+    //         if (email) {
+    //             alert('Thank you for subscribing!');
+    //             this.querySelector('input[type="email"]').value = '';
+    //         }
+    //     });
+    // }
 
     // Animation for cards
     const cards = document.querySelectorAll('.category-card, .promo-card');

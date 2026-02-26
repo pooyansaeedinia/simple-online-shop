@@ -1,3 +1,5 @@
+from django.conf.global_settings import EMAIL_HOST_USER
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
@@ -104,4 +106,23 @@ def product_details(request, pk):
 
 def category(request):
     categories = Category.objects.all()
+    if request.method == 'POST':
+        user_email = request.POST.get('email')
+        your_message = "A Django-based e-commerce web application for managing and selling products online.\nThis project provides a complete shopping experience with user authentication, product catalog, shopping cart, and order management."
+        subject = "Zentrix updates"
+
+        if user_email and your_message:
+            try:
+                send_mail(
+                    subject,
+                    your_message,
+                    EMAIL_HOST_USER,
+                    [user_email],
+                    fail_silently=False,
+                )
+                print("email sent")
+                return render(request, 'product_app/category.html', {'categories': categories})
+            except Exception as e:
+                print(e)
+                return render(request, 'product_app/category.html', {'categories': categories})
     return render(request, 'product_app/category.html', {'categories': categories})
