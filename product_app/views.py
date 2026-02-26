@@ -8,6 +8,7 @@ from home_app.models import Discount
 from product_app.forms import CommentForm
 from product_app.models import Product, Category, Comments
 from django.db.models import Q
+from .filters import ProductFilter
 
 
 # Create your views here.
@@ -31,14 +32,43 @@ def product_list(request, pk):
     elif pk != 0 and pk != 1:
         product_query = product_query.filter(category=pk)
 
-    paginator = Paginator(product_query.distinct(), 20)
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        query_params.pop('page')
+
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+
+    if min_price and max_price:
+        try:
+            min_val = float(min_price)
+            max_val = float(max_price)
+            if min_val > max_val:
+                min_price = None
+        except ValueError:
+            pass
+
+    filtered_products = ProductFilter(request.GET, queryset=product_query)
+
+    star_5 = product_query[0].rating_5_count()
+    print(star_5)
+
+    paginator = Paginator(filtered_products.qs.distinct(), 20)
     page = request.GET.get('page')
     products = paginator.get_page(page)
 
+    selected_categories = request.GET.getlist('category')
+    selected_brands = request.GET.getlist('brand')
+
+
     context = {
         'products': products,
+        'filter': filtered_products,
+        'selected_categories': selected_categories,
+        'selected_brands': selected_brands,
         'query': query,
         'pk': pk,
+        'query_params': query_params.urlencode(),
         'discounted_products': discounted_products,
     }
 

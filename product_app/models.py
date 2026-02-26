@@ -15,6 +15,10 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
+    def product_count(self):
+        return Product.objects.filter(brand=self).count()
+
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -24,8 +28,8 @@ class Category(models.Model):
         return self.name
 
     def product_count(self):
-        product_count = Product.objects.filter(category=self).count()
-        return product_count
+        return Product.objects.filter(category=self).count()
+
 
 
 class Product(models.Model):
@@ -46,6 +50,19 @@ class Product(models.Model):
         if hasattr(self, "discount") and self.discount.is_active:
             return self.discount.new_price
         return self.price
+
+    def rating_1_count(self):
+        return self.objects.filter(rating=1).count()
+    def rating_2_count(self):
+        return self.objects.filter(rating=2).count()
+    def rating_3_count(self):
+        return self.objects.filter(rating=3).count()
+    @staticmethod
+    def rating_4_count():
+        return Product.objects.filter(rating=4).count()
+    @staticmethod
+    def rating_5_count():
+        return Product.objects.filter(rating=5).count()
 
 
 class Comments(models.Model):

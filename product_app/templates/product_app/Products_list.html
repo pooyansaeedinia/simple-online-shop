@@ -17,254 +17,325 @@
 {% endblock head %}
 
 {% block contents %}
-<div class="products-page">
-    <div class="container">
+    <div class="products-page">
+        <div class="container">
 
-        <!-- Header with breadcrumb -->
-        <header class="products-header">
-            <div class="products-breadcrumb">
-                <a href="{% url 'home_app:home' %}">Home</a>
-                <span>/</span>
-                {% if pk == 1 %}
-                    <a href="{% url 'product_app:category' %}">Categories</a>
+            <!-- Header with breadcrumb -->
+            <header class="products-header">
+                <div class="products-breadcrumb">
+                    <a href="{% url 'home_app:home' %}">Home</a>
                     <span>/</span>
-                    <span class="current">Discounted Products</span>
-                {% elif query %}
-                    <a href="{% url 'product_app:product_list' pk=0 %}">Products</a>
-                    <span>/</span>
-                    <span class="current">Search: "{{ query }}"</span>
-                {% else %}
-                    <span class="current">All Products</span>
-                {% endif %}
-            </div>
-
-            <div class="products-title-section">
-                <h1 class="products-title">
-                    {% if query %}
-                        Results for “{{ query }}”
-                        <span class="products-count">{{ products.paginator.count }} items</span>
-                    {% elif pk == 1 %}
-                        Discounted Products
-                        <span class="products-count">Special offers</span>
+                    {% if pk == 1 %}
+                        <a href="{% url 'product_app:category' %}">Categories</a>
+                        <span>/</span>
+                        <span class="current">Discounted Products</span>
+                    {% elif query %}
+                        <a href="{% url 'product_app:product_list' pk=0 %}">Products</a>
+                        <span>/</span>
+                        <span class="current">Search: "{{ query }}"</span>
                     {% else %}
-                        All Products
-                        <span class="products-count">{{ products.paginator.count }} items</span>
+                        <span class="current">All Products</span>
                     {% endif %}
-                </h1>
+                </div>
 
-                <!-- Mobile filter toggle -->
-                <button class="products-filter-toggle d-md-none" id="filterToggleBtn">
-                    <i class="bi bi-sliders2"></i>
-                    Filter
-                    <span class="filter-active-count" id="activeFilterCount" style="display: none;">0</span>
+                <div class="products-title-section">
+                    <h1 class="products-title">
+                        {% if query %}
+                            Results for “{{ query }}”
+                            <span class="products-count">{{ products.paginator.count }} items</span>
+                        {% elif pk == 1 %}
+                            Discounted Products
+                            <span class="products-count">Special offers</span>
+                        {% else %}
+                            All Products
+                            <span class="products-count">{{ products.paginator.count }} items</span>
+                        {% endif %}
+                    </h1>
+
+                    <!-- Mobile filter toggle -->
+                    <button class="products-filter-toggle d-md-none" id="filterToggleBtn">
+                        <i class="bi bi-sliders2"></i>
+                        Filter
+                        <span class="filter-active-count" id="activeFilterCount" style="display: none;">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- View Toggle (Grid/List) for Mobile -->
+            <div class="view-toggle d-md-none">
+                <button class="view-toggle-btn active" data-view="grid">
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                    <span>Grid</span>
+                </button>
+                <button class="view-toggle-btn" data-view="list">
+                    <i class="bi bi-list-ul"></i>
+                    <span>List</span>
                 </button>
             </div>
-        </header>
 
-        <!-- View Toggle (Grid/List) for Mobile -->
-        <div class="view-toggle d-md-none">
-            <button class="view-toggle-btn active" data-view="grid">
-                <i class="bi bi-grid-3x3-gap-fill"></i>
-                <span>Grid</span>
-            </button>
-            <button class="view-toggle-btn" data-view="list">
-                <i class="bi bi-list-ul"></i>
-                <span>List</span>
-            </button>
-        </div>
-
-        <!-- Main Content with Sidebar -->
-        <div class="products-main">
-            <!-- Filter Sidebar -->
-            <aside class="products-sidebar" id="filterSidebar">
-                <div class="sidebar-header">
-                    <h3>Filters</h3>
-                    <button class="sidebar-close d-md-none" id="closeSidebarBtn">&times;</button>
-                </div>
-
-                <div class="sidebar-content">
-                    <!-- Active Filters -->
-                    <div class="filter-section active-filters" id="activeFilters" style="display: none;">
-                        <h4>Active Filters</h4>
-                        <div class="active-filters-list" id="activeFiltersList"></div>
-                        <button class="clear-all-filters" id="clearAllFilters">Clear All</button>
-                    </div>
-
-                    <!-- Category Filter -->
-                    <div class="filter-section">
-                        <h4>Category</h4>
-                        <div class="filter-options">
-                            <label class="filter-option">
-                                <input type="checkbox" name="category" value="electronics"> Electronics
-                                <span class="filter-count">(24)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="category" value="phones"> Phones
-                                <span class="filter-count">(18)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="category" value="laptops"> Laptops
-                                <span class="filter-count">(12)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="category" value="accessories"> Accessories
-                                <span class="filter-count">(30)</span>
-                            </label>
-                            <button class="filter-show-more">Show More +</button>
+            <!-- Main Content with Sidebar -->
+            <div class="products-main">
+                <!-- Filter Sidebar -->
+                <aside class="products-sidebar" id="filterSidebar">
+                    <form method="GET">
+                        <div class="sidebar-header">
+                            <h3>Filters</h3>
+                            <button class="sidebar-close d-md-none" id="closeSidebarBtn">&times;</button>
                         </div>
-                    </div>
 
-                    <!-- Brand Filter -->
-                    <div class="filter-section">
-                        <h4>Brand</h4>
-                        <div class="filter-options">
-                            <label class="filter-option">
-                                <input type="checkbox" name="brand" value="apple"> Apple
-                                <span class="filter-count">(15)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="brand" value="samsung"> Samsung
-                                <span class="filter-count">(12)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="brand" value="xiaomi"> Xiaomi
-                                <span class="filter-count">(8)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="brand" value="sony"> Sony
-                                <span class="filter-count">(6)</span>
-                            </label>
-                            <button class="filter-show-more">Show More +</button>
-                        </div>
-                    </div>
-
-                    <!-- Price Range Filter -->
-                    <div class="filter-section">
-                        <h4>Price Range</h4>
-                        <div class="price-range">
-                            <div class="price-inputs">
-                                <input type="number" class="price-min" id="priceMin" placeholder="Min" value="">
-                                <span>-</span>
-                                <input type="number" class="price-max" id="priceMax" placeholder="Max" value="">
+                        <div class="sidebar-content">
+                            <!-- Active Filters -->
+                            <div class="filter-section active-filters" id="activeFilters" style="display: none;">
+                                <h4>Active Filters</h4>
+                                <div class="active-filters-list" id="activeFiltersList"></div>
+                                <button class="clear-all-filters" id="clearAllFilters">Clear All</button>
                             </div>
-                            <div class="price-presets">
-                                <button class="price-preset" data-min="0" data-max="500">Under $500</button>
-                                <button class="price-preset" data-min="500" data-max="1000">$500 - $1000</button>
-                                <button class="price-preset" data-min="1000" data-max="2000">$1000 - $2000</button>
-                                <button class="price-preset" data-min="2000" data-max="">Over $2000</button>
+
+                            <!-- Category Filter -->
+                            {% if pk == 1 or pk == 0 %}
+                                <div class="filter-section">
+                                    <h4>Category</h4>
+                                    <div class="filter-options">
+                                        {% for category in filter.form.category.field.queryset %}
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="category" value="{{ category.id }}"
+                                                       {% if category.id|stringformat:"s" in selected_categories %}checked{% endif %}> {{ category.name }}
+                                                <span class="filter-count">({{ category.product_count }})</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Brand Filter -->
+                            <div class="filter-section">
+                                <h4>Brand</h4>
+                                <div class="filter-options">
+                                    {% for brand in filter.form.brand.field.queryset %}
+                                        <label class="filter-option">
+                                            <input type="checkbox" name="brand" value="{{ brand.id }}"
+                                                   {% if brand.id|stringformat:"s" in selected_brands %}checked{% endif %}> {{ brand.name }}
+                                            <span class="filter-count">({{ brand.product_count }})</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Price Range Filter -->
+                            <div class="filter-section">
+                                <h4>Price Range</h4>
+                                <div class="price-range">
+                                    <div class="price-inputs">
+                                        <input type="number" class="price-min" id="priceMin" name="min_price"
+                                               placeholder="Min" value="{{ request.GET.min_price }}">
+                                        <span>-</span>
+                                        <input type="number" class="price-max" id="priceMax" name="max_price"
+                                               placeholder="Max" value="{{ request.GET.max_price }}">
+                                    </div>
+                                    <div class="price-presets">
+                                        <button class="price-preset" data-min="0" data-max="500">Under $500</button>
+                                        <button class="price-preset" data-min="500" data-max="1000">$500 - $1000
+                                        </button>
+                                        <button class="price-preset" data-min="1000" data-max="2000">$1000 - $2000
+                                        </button>
+                                        <button class="price-preset" data-min="2000" data-max="">Over $2000</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rating Filter -->
+                            <div class="filter-section">
+                                <h4>Rating</h4>
+                                <div class="filter-options">
+                                    <label class="filter-option rating-option">
+                                        <input type="radio" name="rating" value="5">
+                                        <span class="stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </span>
+                                        <span class="filter-count">({{ products.rating_5_count }})</span>
+                                    </label>
+                                    <label class="filter-option rating-option">
+                                        <input type="radio" name="rating" value="4">
+                                        <span class="stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                </span>
+                                        <span class="filter-count">(32)</span>
+                                    </label>
+                                    <label class="filter-option rating-option">
+                                        <input type="radio" name="rating" value="3">
+                                        <span class="stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                </span>
+                                        <span class="filter-count">(18)</span>
+                                    </label>
+                                    <label class="filter-option rating-option">
+                                        <input type="radio" name="rating" value="2">
+                                        <span class="stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                </span>
+                                        <span class="filter-count">(7)</span>
+                                    </label>
+                                    <label class="filter-option rating-option">
+                                        <input type="radio" name="rating" value="1">
+                                        <span class="stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                </span>
+                                        <span class="filter-count">(3)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Discount Filter -->
+                            <div class="filter-section">
+                                <h4>Offers</h4>
+                                <div class="filter-options">
+                                    <label class="filter-option">
+                                        <input type="checkbox" name="discount" value="sale"> On Sale
+                                        <span class="filter-count">(24)</span>
+                                    </label>
+                                    <label class="filter-option">
+                                        <input type="checkbox" name="discount" value="new"> New Arrivals
+                                        <span class="filter-count">(15)</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Rating Filter -->
-                    <div class="filter-section">
-                        <h4>Rating</h4>
-                        <div class="filter-options">
-                            <label class="filter-option rating-option">
-                                <input type="radio" name="rating" value="5">
-                                <span class="stars">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                </span>
-                                <span class="filter-count">(45)</span>
-                            </label>
-                            <label class="filter-option rating-option">
-                                <input type="radio" name="rating" value="4">
-                                <span class="stars">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star"></i>
-                                </span>
-                                <span class="filter-count">(32)</span>
-                            </label>
-                            <label class="filter-option rating-option">
-                                <input type="radio" name="rating" value="3">
-                                <span class="stars">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                </span>
-                                <span class="filter-count">(18)</span>
-                            </label>
-                            <label class="filter-option rating-option">
-                                <input type="radio" name="rating" value="2">
-                                <span class="stars">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                </span>
-                                <span class="filter-count">(7)</span>
-                            </label>
-                            <label class="filter-option rating-option">
-                                <input type="radio" name="rating" value="1">
-                                <span class="stars">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                </span>
-                                <span class="filter-count">(3)</span>
-                            </label>
+                        <div class="sidebar-footer">
+                            <button class="apply-filters-btn" id="applyFilters">Apply Filters</button>
+                            <button class="reset-filters-btn" id="resetFilters">Reset</button>
                         </div>
+                    </form>
+                </aside>
+
+                <!-- Products Grid Container -->
+                <div class="products-grid-container">
+                    <!-- Sort Options -->
+                    <div class="products-sort">
+                        <span>Sort by:</span>
+                        <select class="products-sort-select" id="sortSelect">
+                            <option value="featured">Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="newest">Newest</option>
+                            <option value="rating">Top Rated</option>
+                        </select>
                     </div>
 
-                    <!-- Discount Filter -->
-                    <div class="filter-section">
-                        <h4>Offers</h4>
-                        <div class="filter-options">
-                            <label class="filter-option">
-                                <input type="checkbox" name="discount" value="sale"> On Sale
-                                <span class="filter-count">(24)</span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="discount" value="new"> New Arrivals
-                                <span class="filter-count">(15)</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                    <div class="products-grid products-grid--grid" id="productsGrid" data-view="grid">
+                        {% if pk == 1 %}
+                            {% for product in products %}
+                                {% if product.final_price != product.price %}
+                                    <!-- Product Card -->
+                                    <article class="product-card"
+                                             data-category="{{ product.category|default:'electronics'|lower }}"
+                                             data-brand="{{ product.brand|default:'apple'|lower }}"
+                                             data-price="{{ product.final_price }}"
+                                             data-rating="{{ product.rating|default:4 }}" data-discount="sale">
+                                        <a href="{% url 'product_app:product_details' pk=product.id %}"
+                                           class="product-card-link">
 
-                <div class="sidebar-footer">
-                    <button class="apply-filters-btn" id="applyFilters">Apply Filters</button>
-                    <button class="reset-filters-btn" id="resetFilters">Reset</button>
-                </div>
-            </aside>
+                                            <!-- Badges -->
+                                            <div class="product-badges">
+                                                <span class="badge badge-sale">Sale</span>
+                                            </div>
 
-            <!-- Products Grid Container -->
-            <div class="products-grid-container">
-                <!-- Sort Options -->
-                <div class="products-sort">
-                    <span>Sort by:</span>
-                    <select class="products-sort-select" id="sortSelect">
-                        <option value="featured">Featured</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="newest">Newest</option>
-                        <option value="rating">Top Rated</option>
-                    </select>
-                </div>
+                                            <!-- Image -->
+                                            <div class="product-image-wrapper">
+                                                <img src="{{ product.image.url }}"
+                                                     alt="{{ product.name }}"
+                                                     class="product-image"
+                                                     loading="lazy">
 
-                <div class="products-grid products-grid--grid" id="productsGrid" data-view="grid">
-                    {% if pk == 1 %}
-                        {% for product in products %}
-                            {% if product.final_price != product.price %}
+                                                <!-- Quick view overlay -->
+                                                <div class="product-quick-view">
+                                                    <span>Quick View</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Content -->
+                                            <div class="product-content">
+                                                <div class="product-category">{{ product.brand|default:"Electronics" }}</div>
+                                                <h3 class="product-name">{{ product.name }}</h3>
+
+                                                <!-- Rating -->
+                                                <div class="product-rating">
+                                                    <div class="stars">
+                                                        {% for i in "12345"|make_list %}
+                                                            {% if forloop.counter <= product.rating %}
+                                                                <i class="bi bi-star-fill"></i>
+                                                            {% else %}
+                                                                <i class="bi bi-star"></i>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <span class="rating-count">({{ product.review_count|default:"0" }})</span>
+                                                </div>
+
+                                                <!-- Price -->
+                                                <div class="product-price">
+                                                    <span class="price-old">${{ product.price }}</span>
+                                                    <span class="price-current">${{ product.final_price }}</span>
+                                                </div>
+
+                                                <!-- View button -->
+                                                <button class="product-add-to-cart"
+                                                        onclick="event.preventDefault(); location.href='{% url 'product_app:product_details' pk=product.id %}'">
+                                                    <i class="bi bi-eye"></i>
+                                                    <span>View Details</span>
+                                                </button>
+                                            </div>
+                                        </a>
+                                    </article>
+                                {% endif %}
+                            {% empty %}
+                                <div class="products-empty">
+                                    <i class="bi bi-tag"></i>
+                                    <h3>No discounted products</h3>
+                                    <p>Check back later for special offers!</p>
+                                    <a href="{% url 'product_app:product_list' pk=0 %}" class="products-empty-btn">Browse
+                                        All Products</a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% for product in products %}
                                 <!-- Product Card -->
-                                <article class="product-card" data-category="{{ product.category|default:'electronics'|lower }}" data-brand="{{ product.brand|default:'apple'|lower }}" data-price="{{ product.final_price }}" data-rating="{{ product.rating|default:4 }}" data-discount="sale">
-                                    <a href="{% url 'product_app:product_details' pk=product.id %}" class="product-card-link">
+                                <article class="product-card"
+                                         data-category="{{ product.category|default:'electronics'|lower }}"
+                                         data-brand="{{ product.brand|default:'apple'|lower }}"
+                                         data-price="
+
+                                                 {% if product.final_price != product.price %}{{ product.final_price }}{% else %}{{ product.price }}{% endif %}"
+                                         data-rating="{{ product.rating|default:4 }}"
+                                         {% if product.final_price != product.price %}data-discount="sale"{% endif %}>
+                                    <a href="{% url 'product_app:product_details' pk=product.id %}"
+                                       class="product-card-link">
 
                                         <!-- Badges -->
                                         <div class="product-badges">
-                                            <span class="badge badge-sale">Sale</span>
+                                            {% if product.final_price != product.price %}
+                                                <span class="badge badge-sale">Sale</span>
+                                            {% endif %}
                                         </div>
 
                                         <!-- Image -->
@@ -301,145 +372,85 @@
 
                                             <!-- Price -->
                                             <div class="product-price">
-                                                <span class="price-old">${{ product.price }}</span>
-                                                <span class="price-current">${{ product.final_price }}</span>
+                                                {% if product.final_price != product.price %}
+                                                    <span class="price-old">${{ product.price }}</span>
+                                                    <span class="price-current">${{ product.final_price }}</span>
+                                                {% else %}
+                                                    <span class="price-current">${{ product.price }}</span>
+                                                {% endif %}
                                             </div>
 
                                             <!-- View button -->
-                                            <button class="product-add-to-cart" onclick="event.preventDefault(); location.href='{% url 'product_app:product_details' pk=product.id %}'">
+                                            <button class="product-add-to-cart"
+                                                    onclick="event.preventDefault(); location.href='{% url 'product_app:product_details' pk=product.id %}'">
                                                 <i class="bi bi-eye"></i>
                                                 <span>View Details</span>
                                             </button>
                                         </div>
                                     </a>
                                 </article>
-                            {% endif %}
-                        {% empty %}
-                            <div class="products-empty">
-                                <i class="bi bi-tag"></i>
-                                <h3>No discounted products</h3>
-                                <p>Check back later for special offers!</p>
-                                <a href="{% url 'product_app:product_list' pk=0 %}" class="products-empty-btn">Browse All Products</a>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        {% for product in products %}
-                            <!-- Product Card -->
-                            <article class="product-card"
-                                     data-category="{{ product.category|default:'electronics'|lower }}"
-                                     data-brand="{{ product.brand|default:'apple'|lower }}"
-                                     data-price="{% if product.final_price != product.price %}{{ product.final_price }}{% else %}{{ product.price }}{% endif %}"
-                                     data-rating="{{ product.rating|default:4 }}"
-                                     {% if product.final_price != product.price %}data-discount="sale"{% endif %}>
-                                <a href="{% url 'product_app:product_details' pk=product.id %}" class="product-card-link">
+                            {% empty %}
+                                <div class="products-empty">
+                                    <i class="bi bi-search"></i>
+                                    <h3>No products found</h3>
+                                    <p>Try adjusting your search or filter to find what you're looking for.</p>
+                                    <a href="{% url 'product_app:product_list' pk=0 %}" class="products-empty-btn">Clear
+                                        Filters</a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
 
-                                    <!-- Badges -->
-                                    <div class="product-badges">
-                                        {% if product.final_price != product.price %}
-                                            <span class="badge badge-sale">Sale</span>
-                                        {% endif %}
-                                    </div>
+                    <!-- Filter overlay for mobile -->
+                    <div class="filter-overlay" id="filterOverlay"></div>
 
-                                    <!-- Image -->
-                                    <div class="product-image-wrapper">
-                                        <img src="{{ product.image.url }}"
-                                             alt="{{ product.name }}"
-                                             class="product-image"
-                                             loading="lazy">
+                    <!-- Pagination -->
+                    {% if products.paginator.num_pages > 1 %}
+                        <nav class="products-pagination" aria-label="Product pagination">
+                            <ul class="pagination">
 
-                                        <!-- Quick view overlay -->
-                                        <div class="product-quick-view">
-                                            <span>Quick View</span>
-                                        </div>
-                                    </div>
+                                {% if products.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="?{{ query_params }}&page={{ products.previous_page_number }}">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
 
-                                    <!-- Content -->
-                                    <div class="product-content">
-                                        <div class="product-category">{{ product.brand|default:"Electronics" }}</div>
-                                        <h3 class="product-name">{{ product.name }}</h3>
+                                {% for num in products.paginator.page_range %}
+                                    {% if products.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="?{{ query_params }}&page={{ num }}">
+                                                {{ num }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
 
-                                        <!-- Rating -->
-                                        <div class="product-rating">
-                                            <div class="stars">
-                                                {% for i in "12345"|make_list %}
-                                                    {% if forloop.counter <= product.rating %}
-                                                        <i class="bi bi-star-fill"></i>
-                                                    {% else %}
-                                                        <i class="bi bi-star"></i>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </div>
-                                            <span class="rating-count">({{ product.review_count|default:"0" }})</span>
-                                        </div>
+                                {% if products.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="?{{ query_params }}&page={{ products.next_page_number }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
 
-                                        <!-- Price -->
-                                        <div class="product-price">
-                                            {% if product.final_price != product.price %}
-                                                <span class="price-old">${{ product.price }}</span>
-                                                <span class="price-current">${{ product.final_price }}</span>
-                                            {% else %}
-                                                <span class="price-current">${{ product.price }}</span>
-                                            {% endif %}
-                                        </div>
-
-                                        <!-- View button -->
-                                        <button class="product-add-to-cart" onclick="event.preventDefault(); location.href='{% url 'product_app:product_details' pk=product.id %}'">
-                                            <i class="bi bi-eye"></i>
-                                            <span>View Details</span>
-                                        </button>
-                                    </div>
-                                </a>
-                            </article>
-                        {% empty %}
-                            <div class="products-empty">
-                                <i class="bi bi-search"></i>
-                                <h3>No products found</h3>
-                                <p>Try adjusting your search or filter to find what you're looking for.</p>
-                                <a href="{% url 'product_app:product_list' pk=0 %}" class="products-empty-btn">Clear Filters</a>
-                            </div>
-                        {% endfor %}
+                            </ul>
+                        </nav>
                     {% endif %}
                 </div>
-
-                <!-- Filter overlay for mobile -->
-                <div class="filter-overlay" id="filterOverlay"></div>
-
-                <!-- Pagination -->
-                {% if products.paginator.num_pages > 1 %}
-                    <nav class="products-pagination" aria-label="Product pagination">
-                        <ul class="pagination">
-                            {% if products.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="{% if query %}?q={{ query }}&page={{ products.previous_page_number }}{% else %}?page={{ products.previous_page_number }}{% endif %}" aria-label="Previous">
-                                        <i class="bi bi-chevron-left"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
-
-                            {% for num in products.paginator.page_range %}
-                                {% if products.number == num %}
-                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-                                    <li class="page-item"><a class="page-link" href="{% if query %}?q={{ query }}&page={{ num }}{% else %}?page={{ num }}{% endif %}">{{ num }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if products.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="{% if query %}?q={{ query }}&page={{ products.next_page_number }}{% else %}?page={{ products.next_page_number }}{% endif %}" aria-label="Next">
-                                        <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
             </div>
         </div>
     </div>
-</div>
-<!-- Filter JavaScript -->
-{% block scripts %}
-    <script src="{% static "js/products_list.js" %}"></script>
-{% endblock scripts %}
+    <!-- Filter JavaScript -->
+    {% block scripts %}
+        <script src="{% static "js/products_list.js" %}"></script>
+    {% endblock scripts %}
 {% endblock contents %}
